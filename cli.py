@@ -29,9 +29,9 @@ pp = pprint.PrettyPrinter(depth=6)
 
 # Parse arguments
 usage = '''cli.py ACTION [--unit UNIT] [--file FILE] [--version VERSION]
-           action : chckcon | initrepo | createagents | createrecset | updaterecset\n'''
+           action : checkcon | initrepo | loadagents | loadref | updateref\n'''
 parser = argparse.ArgumentParser(description='Manage Fedora Commons repository.')
-parser.add_argument('action', help='initrepo | createagents | createrecset | updaterecset .')
+parser.add_argument('action', help='checkcon | initrepo | loadagents | loadref | updateref .')
 parser.add_argument('--unit', dest='unitCode', help='Target unit.')
 parser.add_argument('--unitDesc', dest='unitDescription', help='Target unit description.')
 parser.add_argument('--file', dest='input_file', help='Input file.')
@@ -58,7 +58,7 @@ if args.action=='checkcon':
     print(r.status_code)
    
 elif args.action=='initrepo':
-    print('Init repository')
+    print('Init repository ...')
     
     status_codes = repo.init_types(fedoraUrl=fedoraUrl, auth=auth)
     print('Init record types', status_codes)
@@ -69,6 +69,14 @@ elif args.action=='initrepo':
     status_codes = repo.init_rules(fedoraUrl=fedoraUrl, auth=auth)
     print('Init record mangement rules', status_codes)
     
+    status_codes = agents.create_root(fedoraUrl=fedoraUrl, auth=auth)
+    print('Init agents root', status_codes)
+ 
+elif args.action=='loadagents':
+    print('Load agents from {input_file}...'.format(input_file=args.input_file))
+    status_codes = agents.load_tree(fedoraUrl=fedoraUrl, auth=auth, filename=args.input_file)
+    print('Init record types', status_codes)
+
 else:
     print(usage)
 
