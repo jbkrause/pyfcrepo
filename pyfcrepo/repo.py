@@ -13,6 +13,14 @@
 import requests
 from . import nodes
 
+def init_records(fedoraUrl, auth):
+    statesUrl = fedoraUrl + 'records'
+    status_codes = []
+    title = 'Records'
+    description = 'Records sets ands records.'
+    status_codes.append( nodes.create_basic(statesUrl, auth, title, description) )
+    return(status_codes)
+
 def init_types(fedoraUrl, auth):
 
     typesUrl = fedoraUrl + 'types'

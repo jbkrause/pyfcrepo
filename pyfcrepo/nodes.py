@@ -12,12 +12,14 @@
 
 import requests
 
-def create_basic(url, auth, title, description, recordType=None): 
+def create_basic(url, auth, title, description, recordType=None, children=None):
     headers = {"Content-Type": "text/turtle"}
     data = """ <>  <rico:title> '{title}'.
                <>  <rico:scopeAndContent>   '{description}'.
                """.format(title=title, description=description)
     if recordType is not None:
         data += '<>  <rico:type>  {recordType}.\n'.format(recordType=recordType)
+    if children is not None:
+        data += '<>  <rico:hasOrHadPart> <{childrenStr}>.\n'.format(childrenStr=children)
     r = requests.put(url, auth=auth, data=data.encode('utf-8'), headers=headers)
     return r.status_code

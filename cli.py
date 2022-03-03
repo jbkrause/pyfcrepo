@@ -23,7 +23,7 @@ import requests
 
 from pyfcrepo import repo
 from pyfcrepo import agents
-from pyfcrepo import recset
+from pyfcrepo import ref
 
 pp = pprint.PrettyPrinter(depth=6)
 
@@ -33,7 +33,7 @@ usage = '''cli.py ACTION [--unit UNIT] [--file FILE] [--version VERSION]
 parser = argparse.ArgumentParser(description='Manage Fedora Commons repository.')
 parser.add_argument('action', help='checkcon | initrepo | loadagents | loadref | updateref .')
 parser.add_argument('--unit', dest='unitCode', help='Target unit.')
-parser.add_argument('--unitDesc', dest='unitDescription', help='Target unit description.')
+parser.add_argument('--unitDesc', dest='unitDesc', help='Target unit description.')
 parser.add_argument('--file', dest='input_file', help='Input file.')
 parser.add_argument('--version', dest='version', help='Information package ID, used to generate the primer')
 
@@ -58,17 +58,15 @@ if args.action=='checkcon':
     print(r.status_code)
    
 elif args.action=='initrepo':
-    print('Init repository ...')
-    
+    print('Init repository ...') 
+    status_codes = repo.init_records(fedoraUrl=fedoraUrl, auth=auth)
+    print('Init records', status_codes)      
     status_codes = repo.init_types(fedoraUrl=fedoraUrl, auth=auth)
-    print('Init record types', status_codes)
-    
+    print('Init record types', status_codes)   
     status_codes = repo.init_states(fedoraUrl=fedoraUrl, auth=auth)
     print('Init record states', status_codes)
-
     status_codes = repo.init_rules(fedoraUrl=fedoraUrl, auth=auth)
-    print('Init record mangement rules', status_codes)
-    
+    print('Init record mangement rules', status_codes)   
     status_codes = agents.create_root(fedoraUrl=fedoraUrl, auth=auth)
     print('Init agents root', status_codes)
  
@@ -77,6 +75,13 @@ elif args.action=='loadagents':
     status_codes = agents.load_tree(fedoraUrl=fedoraUrl, auth=auth, filename=args.input_file)
     print('Init record types', status_codes)
 
+elif args.action=='loadref':
+    print('Load preservation referential...')
+    status_codes = ref.load_ref(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode,  unitDesc=args.unitDesc,
+                                version=args.version, filename=args.input_file)
+    print('Units', status_codes)
+    
 else:
     print(usage)
 
