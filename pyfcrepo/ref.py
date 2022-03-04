@@ -124,7 +124,7 @@ def load_ref(fedoraUrl, auth, unit, unitDesc, version, filename):
         # create rico turtle
         headers = {"Content-Type": "text/turtle"}
         data = """ <>  <rico:title> '{title}'.
-                   <>  <rico:hasCreator> '<{creator}>'.
+                   <>  <rico:hasCreator> <{creator}>.
                    <>  <rico:isRecordSetTypeOf> <{recSetType}>.
                    <>  <rico:scopeAndContent>  '{abstract}'.
                    <>  <rico:hasOrHadIdentifier>  '{identifier}'.

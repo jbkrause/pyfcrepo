@@ -1,0 +1,3 @@
+id;type;callnr;parent;instance;title;description;fmt;mimetype;filename
+D100;dossier;D.00.01;12;;Long term preservation;Dossier on LTP.;;;
+D100;document;1;;I1;OAIS Introduction;ISO 14721;fmt/95;application/pdf;data/records/files/file.pdf

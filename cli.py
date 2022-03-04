@@ -87,13 +87,26 @@ elif args.action=='dossier':
     print('Create dossier...')
     status_codes = records.create_dossier(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode)
-    print('Sossier', status_codes)
+    print('Dossier', status_codes)
 
 elif args.action=='document':
     print('Create document...')
     status_codes = records.create_document(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode)
-    print('Sossier', status_codes)
+    print('Dossier', status_codes)
+    print('Dossier', status_codes)
+    
+elif args.action=='dossier':
+    print('Create dossier...')
+    status_codes = records.create_dossier(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode)
+    print('Dossier', status_codes)
+
+elif args.action=='loadrecords':
+    print('Load records...')
+    status_codes = records.load_records(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode)
+    print('Dossier', status_codes)
     
 else:
     print(usage)
