@@ -23,7 +23,7 @@ import requests
 
 from pyfcrepo import repo
 from pyfcrepo import agents
-from pyfcrepo import ref
+from pyfcrepo import referential
 from pyfcrepo import records
 
 pp = pprint.PrettyPrinter(depth=6)
@@ -36,6 +36,7 @@ parser.add_argument('action', help='checkcon | initrepo | loadagents | loadref |
 parser.add_argument('--unit', dest='unitCode', help='Target unit.')
 parser.add_argument('--unitDesc', dest='unitDesc', help='Target unit description.')
 parser.add_argument('--file', dest='input_file', help='Input file.')
+parser.add_argument('--oldfile', dest='oldfile', help='Input file.')
 parser.add_argument('--version', dest='version', help='Information package ID, used to generate the primer')
 
 args = parser.parse_args()
@@ -78,35 +79,25 @@ elif args.action=='loadagents':
 
 elif args.action=='loadref':
     print('Load preservation referential...')
-    status_codes = ref.load_ref(fedoraUrl=fedoraUrl, auth=auth, 
+    status_codes = referential.load_ref(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode,  unitDesc=args.unitDesc,
                                 version=args.version, filename=args.input_file)
     print('Units', status_codes)
 
-elif args.action=='dossier':
-    print('Create dossier...')
-    status_codes = records.create_dossier(fedoraUrl=fedoraUrl, auth=auth, 
-                                unit=args.unitCode)
-    print('Dossier', status_codes)
-
-elif args.action=='document':
-    print('Create document...')
-    status_codes = records.create_document(fedoraUrl=fedoraUrl, auth=auth, 
-                                unit=args.unitCode)
-    print('Dossier', status_codes)
-    print('Dossier', status_codes)
-    
-elif args.action=='dossier':
-    print('Create dossier...')
-    status_codes = records.create_dossier(fedoraUrl=fedoraUrl, auth=auth, 
-                                unit=args.unitCode)
-    print('Dossier', status_codes)
 
 elif args.action=='loadrecords':
     print('Load records...')
     status_codes = records.load_records(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode)
     print('Dossier', status_codes)
+    
+elif args.action=='updateref':
+    print('Update referetial...')
+    status_codes = referential.update_ref(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode,
+                                version=args.version,
+                                filename=args.input_file, filename_old=args.oldfile)
+    print('Update statuses', status_codes)
     
 else:
     print(usage)

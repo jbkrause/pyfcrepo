@@ -43,4 +43,6 @@ C:\path\to\java\jdk\bin\java.exe -jar fcrepo-webapp-6.0.0-jetty-console.jar
 python cli.py initrepo
 python cli.py loadagents --file data/agents/EdV.csv
 python cli.py loadref --unit ACV --unitDesc "Archives cantonales vaudoises" --file data/referentials/acv2.0.0.csv --version 2.0.0
+python cli.py loadrecords --unit ACV --file data/records/records.csv
+python cli.py updateref --unit ACV --file data/referentials/acv3.0.0.csv --oldfile data/referentials/acv2.0.0.csv --version 3.0.0
 ```
