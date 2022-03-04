@@ -98,6 +98,14 @@ elif args.action=='updateref':
                                 version=args.version,
                                 filename=args.input_file, filename_old=args.oldfile)
     print('Update statuses', status_codes)
+
+elif args.action=='dumpref':
+    print('Update referetial...')
+    status_codes = referential.dump_ref(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode,
+                                version=args.version,
+                                filename=args.input_file)
+    print('Dumped referential into file', args.input_file)
     
 else:
     print(usage)
