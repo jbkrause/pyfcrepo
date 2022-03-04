@@ -20,12 +20,6 @@ from collections import defaultdict
 ## helpers ##
 #############
 
-def strip_textfield(s):
-    if isinstance(s, str):
-        return s.strip('"= ')
-    else:
-        return ''
-
 def id2code(unitCode, i, nodeType='r'):
     #return unitCode.lower() +'/'+ str(nodeType) + str(i)
     return 'records/'+ unitCode.lower() + '/' + str(i)
@@ -34,39 +28,101 @@ def id2code(unitCode, i, nodeType='r'):
 ## load refernetial ##
 ######################
     
-def load_ref(fedoraUrl, auth, unit, unitDesc, version, filename):
+def create_dossier(fedoraUrl, auth, unit, did='D1', callnr='M.10.01-D2', parent='acv/235', children=[1] ):
 
     status_codes = []       
     urlRecords = fedoraUrl + 'records/' 
     typesUrl = fedoraUrl + 'types'
     rulesUrl = fedoraUrl + 'rules'
     
-    # create unit root
-    url = urlRecords + unit.lower()
-    title = unit
-    if unitDesc is None:
-        description = ''
-    else:
-        description = unitDesc
-    childrenStr = url + '/0'
-    status_codes.append( nodes.create_basic(url, 
-                                            auth, 
-                                            title, 
-                                            description, 
-                                            children=childrenStr) )
-                                            
+    # dossier = AIP
+    node_parent = urlRecords + parent
+    rId = 'D1' 
+    cote = 'M.10.01-D1'
+
+    urlDossier = fedoraUrl + id2code(unit, did, nodeType='r' )
+    recordSetType = typesUrl+'/dossier'
+
+    node_children = [ '<'+urlDossier+'/documents/'+str(i)+'>' for i in children ]
+    children_str = ', '.join(node_children)
+    parts = '<>  <rico:hasOrHadPart> ' + children_str + ' .'
+
+    recordState = fedoraUrl + 'states/open'
+
+    urlDocument = node_children[0]
+
+    headers2 = {"Content-Type": "text/turtle",
+               "Link": '<http://fedora.info/definitions/v4/repository#ArchivalGroup>;rel="type"'}
+    data = """ <>  <rico:title> '{title}'.
+               <>  <rico:hasCreator> '<{creator}>'.
+               <>  <rico:hasRecordState>  <{state}>.
+               <>  <rico:isRecordSetTypeOf> <{recSetType}>.
+               <>  <rico:scopeAndContent>  '{abstract}'.
+               <>  <rico:hasOrHadIdentifier>  '{identifier}'.
+               <>  <rico:isOrWasPartOf> <{parent}>.
+               {parts}
+           """.format( title='Le dossier', 
+                       abstract='La description du dossier',
+                       creator='http://localhost:8080/rest/agents/roche66',
+                       parent=node_parent,
+                       parts=parts,
+                       identifier=cote,
+                       state=recordState,
+                       recSetType=recordSetType)
+    r = requests.put(urlDossier, auth=auth, data=data.encode('utf-8'), headers=headers2)
+
+    status_codes.append(r.status_code)
+    return status_codes
+
+def create_document(fedoraUrl, auth, unit, did='1', parent='D1', filename='data\\records\\files\\file.pdf', mimetype='application/pdf', title='A document', description='A PDF document.' ):
     
+    status_codes = []
+    
+    urlDossier = fedoraUrl + id2code( unit, parent, nodeType='r' )
+    documentsUrl = urlDossier + '/documents'
+    
+    headers = {"Content-Type": "text/turtle"}
+    data = """ <>  <rico:title> 'documents'.
+               <>  <rico:scopeAndContent>   'Docuements container.'.
+               """
+    r = requests.put(documentsUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
+    status_codes.append( r.status_code )
+    
+    documentUrl = documentsUrl + '/' + did
+    instantiationUrl = documentUrl + '/i1'
+    #fileUrl = instantiationUrl + '/f1'
 
-    if filename is None:
-        f = 'data/acv1.0.0.csv'
-    else:
-        f = filename
-    df = pd.read_csv(f, sep=";")
+    headers = {"Content-Type": "text/turtle"}
+    data = """ <>  <rico:title> '{title}'.
+               <>  <rico:scopeAndContent>   '{description}'.
+               <>  <rico:hasInstantiation> <{instantiation}>.
+               """.format(instantiation=instantiationUrl, title=title, description=description)
+    r = requests.put(documentUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
+    status_codes.append( r.status_code )
+    
+    headers = {"Content-Type": "text/turtle"}
+    data = """ <>  <premis:hasCompositionLevel> "0".
+               <>  <premis:orginalName> "{filename}".
+               <>  <ebucore:hasMimeType> "{mimetype}".
+               <>  <rico:type> <rico:Instantiation>.
+               <>  <http://www.w3.org/2004/02/skos/exactMatch> <http://www.nationalarchives.gov.uk/pronom/fmt/95>.
+               <>  <rico:type> <premis:file>.
+               """.format(instantiation=instantiationUrl, filename=filename, mimetype=mimetype)
+    r = requests.put(instantiationUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
+    status_codes.append( r.status_code )   
+    
+    headers3 = {"Content-Type": mimetype,
+                "Link" :"<http://www.w3.org/ns/ldp#NonRDFSource>; rel=type"}
+    data = open(filename,'rb').read()
+    r = requests.put(instantiationUrl+'/binary', auth=auth, data=data, headers=headers3)
+    status_codes.append( r.status_code )
+    
+    return( status_codes )
 
-    if version is None:
-        v = '1.0.0'
-    else:
-        v = version
+def blabla():
+
+
+   
 
     df['id'] = df['M1']
     df['parent_id'] = df['M2']

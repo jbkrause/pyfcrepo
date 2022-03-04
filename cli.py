@@ -24,6 +24,7 @@ import requests
 from pyfcrepo import repo
 from pyfcrepo import agents
 from pyfcrepo import ref
+from pyfcrepo import records
 
 pp = pprint.PrettyPrinter(depth=6)
 
@@ -81,6 +82,18 @@ elif args.action=='loadref':
                                 unit=args.unitCode,  unitDesc=args.unitDesc,
                                 version=args.version, filename=args.input_file)
     print('Units', status_codes)
+
+elif args.action=='dossier':
+    print('Create dossier...')
+    status_codes = records.create_dossier(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode)
+    print('Sossier', status_codes)
+
+elif args.action=='document':
+    print('Create document...')
+    status_codes = records.create_document(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode)
+    print('Sossier', status_codes)
     
 else:
     print(usage)
