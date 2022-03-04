@@ -307,14 +307,28 @@ def get_children(url, auth):
         print('ERROR')
     return children
 
+def get_metadata(url, auth):
+    r =  requests.get(url, auth=auth)
+    out = {'title':'None', 'callnr':'X'}
+    if r.status_code == 200:
+        data = r.text
+        for l in data.split('\n'):
+            if '<rico:title>' in l:
+                l2 = l.replace('<rico:title>','').strip(' \t\n.;<>')
+                out['title'] = l2
+            elif '<rico:hasOrHadIdentifier>' in l:
+                l2 = l.replace('<rico:hasOrHadIdentifier>','').strip(' \t\n.;<>')
+                out['callnr'] = l2
+    else:
+        print('ERROR')
+    return out
+    
 def traverse(url, auth):
     html = ''
     for x in get_children(url, auth): 
-        #html += '\n<li><a href="{}" title="{}">'.format(x['path'], x['abstract']) + x['cote_position'] + '-' + x['directory'] + '</a></li>\n'
-        html += '\n<li><a href="{href}" title="{title}">'.format(href=x, title=x) + x + '</a></li>\n'
-        #url = fedoraUrl + id2code(unit.lower(), x )
+        md = get_metadata(x, auth)
+        html += '\n<li><a href="{href}" title="{title}">'.format(href=x, title=md['title']) + md['callnr'] + '-' + md['title'] + '</a></li>\n'
         ch = get_children(x, auth)
-        #print(ch)
         if len(ch) >0:
             for x in ch:
                 html2 = traverse(x, auth)
@@ -322,7 +336,7 @@ def traverse(url, auth):
                     html += '\n<ul>' + html2 + '</ul>\n'
     return html
 
-def traverse_html(url, auth):
+def traverse_html(url, auth, version=None):
     html = '<html>\n'
     html += '''<style>
                        ul {list-style: none;}
@@ -330,6 +344,8 @@ def traverse_html(url, auth):
             </style>'''
     html += '<body>\n'
     html += '<h3> Tree </h3>\n'
+    if version is not None:
+        html +='version {version}'.format(version=version)
     html += '<ul class="collapsibleList">\n' 
     html += traverse(url, auth)
     html += '</ul>\n'
@@ -358,5 +374,5 @@ def dump_ref(fedoraUrl, auth, unit, version, filename):
     
     url = fedoraUrl + id2code(unit.lower(), 0 )
     #children = get_children(url, auth)
-    html = traverse_html(url, auth) 
+    html = traverse_html(url, auth, version=version) 
     open(filename, 'w').write( html )    
