@@ -309,7 +309,7 @@ def get_children(url, auth):
 
 def get_metadata(url, auth):
     r =  requests.get(url, auth=auth)
-    out = {'title':'None', 'callnr':'X'}
+    out = {'url':url, 'title':'None', 'callnr':'X', 'version':'None'}
     if r.status_code == 200:
         data = r.text
         for l in data.split('\n'):
@@ -319,24 +319,68 @@ def get_metadata(url, auth):
             elif '<rico:hasOrHadIdentifier>' in l:
                 l2 = l.replace('<rico:hasOrHadIdentifier>','').strip(' \t\n.;<>')
                 out['callnr'] = l2
+            elif '<premis:version>' in l:
+                l2 = l.replace('<premis:version>','').strip(' \t\n.;<>')
+                out['version'] = l2
     else:
         print('ERROR')
     return out
-    
+   
 def traverse(url, auth):
-    html = ''
-    for x in get_children(url, auth): 
+    """Sorted tree traversal"""
+    def get_callnr(x):
+        return x['callnr']
+    tree = []
+    children = get_children(url, auth)
+    children_md = [get_metadata(u, auth) for u in children]
+    children_md_sorted = sorted( children_md, key=get_callnr )
+    for x in children_md_sorted : 
+        tree.append(x)
+        tree2 = traverse(x['url'], auth)
+        if len(tree2) > 0 :
+            tree.append( [tree2] )
+    return tree
+    
+def traverse_unsorted(url, auth):
+    """Unsorted tree traveral"""
+    tree = []
+    for x in get_children(url, auth) : 
         md = get_metadata(x, auth)
-        html += '\n<li><a href="{href}" title="{title}">'.format(href=x, title=md['title']) + md['callnr'] + '-' + md['title'] + '</a></li>\n'
-        ch = get_children(x, auth)
-        if len(ch) >0:
-            for x in ch:
-                html2 = traverse(x, auth)
-                if not html2 == '':
-                    html += '\n<ul>' + html2 + '</ul>\n'
+        tree.append(md)
+        tree2 = traverse(x, auth)
+        if len(tree2) > 0 :
+            tree.append( [tree2] )
+    return tree
+
+def tree2html(tree):
+    html = ''
+    for x in tree :
+        if not isinstance(x, list):
+            html += '\n<li><a href="{href}" title="{title}">'.format(href=x['url'], title=x['title']) + x['callnr'] + '-' + x['title'] + '</a></li>\n'
+        else:
+            html2 = tree2html(x)
+            html += '\n<ul>' + html2 + '</ul>\n'
+    return html
+    
+def traverse_html(url, auth, version=None):
+    html = '<html>\n'
+    html += '''<style>
+                       ul {list-style: none;}
+                       a { text-decoration: none;}
+            </style>'''
+    html += '<body>\n'
+    html += '<h3> Tree </h3>\n'
+    if version is not None:
+        html +='version {version}'.format(version=version)
+    html += '<ul class="collapsibleList">\n' 
+    html += tree2html( traverse(url, auth) )
+    html += '</ul>\n'
+    html += '\n<script type="text/javascript">CollapsibleLists.apply();</script>\n'
+    html += '</body>\n'
+    html += '</html>'
     return html
 
-def traverse_html(url, auth, version=None):
+def traverse_html_lastVersion(url, auth, version=None):
     html = '<html>\n'
     html += '''<style>
                        ul {list-style: none;}
