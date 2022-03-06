@@ -15,6 +15,7 @@ import pandas as pd
 from . import nodes
 
 from collections import defaultdict
+import re
 
 #############
 ## helpers ##
@@ -195,7 +196,7 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
 
     for ix, row in df2.iterrows():
         url = fedoraUrl + id2code(unit.lower(), row['id'] )
-        print(url)
+        #print(url)
         
         # compute parent node
         p_nodes = parents[row['id']]
@@ -257,13 +258,13 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
                            rules=rules)
         
         r = requests.put(url, auth=auth, data=data.encode('utf-8'), headers=headers)
-        print('records/acv/'+str(row['id']), r.status_code)
+        #print('records/acv/'+str(row['id']), r.status_code)
 
     # Process deleted records : change state to closed
 
     for rid in deleted:
         url = fedoraUrl + id2code(unit.lower(), rid )
-        print(url)
+        #print(url)
 
         newTriple = """<{url}>  <rico:hasRecordState> <http://localhost:8080/rest/states/closed> .  
                     """.format(url=url)
@@ -288,12 +289,69 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
             print(r.status_code)
             print(r.text)
 
-        print(data2)
+        #print(data2)
         r = requests.put(url, auth=auth, data=data2.encode('utf-8'), headers=headers)
         print(r.status_code)
 
-        
-def get_children(url, auth):
+def get_metadata(url, auth):
+    r =  requests.get(url, auth=auth)
+    out = {'url':url, 'title':'None', 'callnr':'X', 'version':'None'}
+    if r.status_code == 200:
+        data = r.text
+        for l in data.split('\n'):
+            if '<rico:title>' in l:
+                l2 = l.replace('<rico:title>','').strip(' \t\n.;<>"')
+                out['title'] = l2
+            elif '<rico:hasOrHadIdentifier>' in l:
+                l2 = l.replace('<rico:hasOrHadIdentifier>','').strip(' \t\n.;<>"')
+                out['callnr'] = l2
+            elif '<premis:version>' in l:
+                l2 = l.replace('<premis:version>','').strip(' \t\n.;<>"')
+                out['version'] = l2
+    else:
+        print('ERROR')
+    return out
+    
+def get_versions(url, auth):
+    r = requests.get(url + '/fcr:versions', auth=auth)
+    versions_ttl = r.text
+    versions = []
+    for t in re.findall('((?=<)(?!<\/)<)(.*?)((?= \/>)|(?=>))', versions_ttl):
+        if '/fcr:versions/' in t[1]:
+            versions.append( t[1] ) # .split('/')[-1]
+    return versions
+
+def get_current_version(versions):
+    return sorted(versions)[-1]  
+    
+def get_children(url, auth, version=None):
+    if version is None:
+        r =  requests.get(url, auth=auth)
+    else:
+        versions = sorted( get_versions(url, auth=auth) )
+        ver =  versions[0]
+        print(ver)
+        r =  requests.get(ver, auth=auth)
+    children = []
+    if r.status_code == 200:
+        data = r.text
+        for l in data.split('\n'):
+            if '<rico:hasOrHadPart>' in l:
+                l2 = l.replace('<rico:hasOrHadPart>','').strip(' \t\n.;<>')
+                children.append(l2)
+    else:
+        print('ERROR')
+    # keep only children of requested version
+    #if version is not None:
+    #    children2 = []
+    #    for child in children:
+    #        child_version = get_metadata(child, auth)['version'].strip('"')
+    #        if child_version == version:
+    #            children2.append(child)
+    #    children = children2
+    return children
+
+def get_children_lastVersion(url, auth):
     r =  requests.get(url, auth=auth)
     children = []
     if r.status_code == 200:
@@ -306,27 +364,24 @@ def get_children(url, auth):
     else:
         print('ERROR')
     return children
-
-def get_metadata(url, auth):
-    r =  requests.get(url, auth=auth)
-    out = {'url':url, 'title':'None', 'callnr':'X', 'version':'None'}
-    if r.status_code == 200:
-        data = r.text
-        for l in data.split('\n'):
-            if '<rico:title>' in l:
-                l2 = l.replace('<rico:title>','').strip(' \t\n.;<>')
-                out['title'] = l2
-            elif '<rico:hasOrHadIdentifier>' in l:
-                l2 = l.replace('<rico:hasOrHadIdentifier>','').strip(' \t\n.;<>')
-                out['callnr'] = l2
-            elif '<premis:version>' in l:
-                l2 = l.replace('<premis:version>','').strip(' \t\n.;<>')
-                out['version'] = l2
-    else:
-        print('ERROR')
-    return out
-   
-def traverse(url, auth):
+    
+def traverse(url, auth, version=None):
+    """Sorted tree traversal"""
+    def get_callnr(x):
+        return x['callnr']
+    tree = []
+    children = get_children(url, auth, version=version)
+    if isinstance(children, list):
+        children_md = [get_metadata(u, auth) for u in children]
+        children_md_sorted = sorted( children_md, key=get_callnr )
+        for x in children_md_sorted : 
+            tree.append(x)
+            tree2 = traverse(x['url'], auth)
+            if len(tree2) > 0 :
+                tree.append( [tree2] )
+    return tree
+    
+def traverse_sorted(url, auth):
     """Sorted tree traversal"""
     def get_callnr(x):
         return x['callnr']
@@ -373,43 +428,12 @@ def traverse_html(url, auth, version=None):
     if version is not None:
         html +='version {version}'.format(version=version)
     html += '<ul class="collapsibleList">\n' 
-    html += tree2html( traverse(url, auth) )
+    html += tree2html( traverse(url, auth, version=version) )
     html += '</ul>\n'
     html += '\n<script type="text/javascript">CollapsibleLists.apply();</script>\n'
     html += '</body>\n'
     html += '</html>'
     return html
-
-def traverse_html_lastVersion(url, auth, version=None):
-    html = '<html>\n'
-    html += '''<style>
-                       ul {list-style: none;}
-                       a { text-decoration: none;}
-            </style>'''
-    html += '<body>\n'
-    html += '<h3> Tree </h3>\n'
-    if version is not None:
-        html +='version {version}'.format(version=version)
-    html += '<ul class="collapsibleList">\n' 
-    html += traverse(url, auth)
-    html += '</ul>\n'
-    html += '\n<script type="text/javascript">CollapsibleLists.apply();</script>\n'
-    html += '</body>\n'
-    html += '</html>'
-    return html
-    
-def get_object_versions(url, auth):
-    r = requests.get(url + '/fcr:versions', auth=auth)
-    versions_ttl = r.text
-    versions = []
-    for t in re.findall('((?=<)(?!<\/)<)(.*?)((?= \/>)|(?=>))', versions_ttl):
-        if '/fcr:versions/' in t[1]:
-            versions.append( t[1].split('/')[-1] )
-    return versions
-
-
-def get_current_version(versions):
-    return sorted(versions)[-1]
         
 def dump_ref(fedoraUrl, auth, unit, version, filename):
     urlRecords = fedoraUrl + 'records/' 

@@ -77,9 +77,9 @@ def create_dossier(fedoraUrl, auth, unit,
                        state=recordState,
                        recSetType=recordSetType)
     r = requests.put(urlDossier, auth=auth, data=data.encode('utf-8'), headers=headers2)
-    print(urlDossier)
-    print(data)
-    print(r.status_code)
+    #print(urlDossier)
+    #print(data)
+    #print(r.status_code)
     
     status_codes.append(r.status_code)
     return status_codes
@@ -112,7 +112,7 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
                """.format(instantiation=instantiationUrl, title=title, description=description)
     r = requests.put(documentUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
     status_codes.append( r.status_code )
-    print(data)
+    #print(data)
     
     headers = {"Content-Type": "text/turtle"}
     data = """ <>  <premis:hasCompositionLevel> "0".
@@ -124,7 +124,7 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
                """.format(instantiation=instantiationUrl, filename=filename, mimetype=mimetype)
     r = requests.put(instantiationUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
     status_codes.append( r.status_code )  
-    print(data)
+    #print(data)
     
     headers3 = {"Content-Type": mimetype,
                 "Link" :"<http://www.w3.org/ns/ldp#NonRDFSource>; rel=type"}

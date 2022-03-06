@@ -37,7 +37,7 @@ parser.add_argument('--unit', dest='unitCode', help='Target unit.')
 parser.add_argument('--unitDesc', dest='unitDesc', help='Target unit description.')
 parser.add_argument('--file', dest='input_file', help='Input file.')
 parser.add_argument('--oldfile', dest='oldfile', help='Input file.')
-parser.add_argument('--version', dest='version', help='Information package ID, used to generate the primer')
+parser.add_argument('--version', dest='version', help='Version of refernetial')
 
 args = parser.parse_args()
 
@@ -78,7 +78,7 @@ elif args.action=='loadagents':
     print('Init record types', status_codes)
 
 elif args.action=='loadref':
-    print('Load preservation referential...')
+    print('Load preservation referential version ' + args.version)
     status_codes = referential.load_ref(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode,  unitDesc=args.unitDesc,
                                 version=args.version, filename=args.input_file)
@@ -92,7 +92,7 @@ elif args.action=='loadrecords':
     print('Dossier', status_codes)
     
 elif args.action=='updateref':
-    print('Update referetial...')
+    print('Update referetial to version ' + args.version)
     status_codes = referential.update_ref(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode,
                                 version=args.version,
@@ -100,7 +100,7 @@ elif args.action=='updateref':
     print('Update statuses', status_codes)
 
 elif args.action=='dumpref':
-    print('Update referetial...')
+    print('Dump referetial...')
     status_codes = referential.dump_ref(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode,
                                 version=args.version,
