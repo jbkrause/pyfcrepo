@@ -332,7 +332,13 @@ def get_children(url, auth, version=None):
         r =  requests.get(url, auth=auth)
     else:
         versions = sorted( get_versions(url, auth=auth) )
-        ver =  versions[0]
+        ver = None
+        for v in versions:
+            md = get_metadata(v, auth)
+            if md['version'] == version:
+                ver = v
+        #if ver == None:
+        #    ver =  versions[0]
         print(ver)
         r =  requests.get(ver, auth=auth)
     children = []
@@ -351,7 +357,6 @@ def get_children_lastVersion(url, auth):
     children = []
     if r.status_code == 200:
         data = r.text
-        #print(data)
         for l in data.split('\n'):
             if '<rico:hasOrHadPart>' in l:
                 l2 = l.replace('<rico:hasOrHadPart>','').strip(' \t\n.;<>')
@@ -361,7 +366,7 @@ def get_children_lastVersion(url, auth):
     return children
     
 def traverse(url, auth, version=None):
-    """Sorted tree traversal"""
+    """Sorted tree traversal with version filtering"""
     def get_callnr(x):
         return x['callnr']
     tree = []
@@ -371,7 +376,7 @@ def traverse(url, auth, version=None):
         children_md_sorted = sorted( children_md, key=get_callnr )
         for x in children_md_sorted : 
             tree.append(x)
-            tree2 = traverse(x['url'], auth, version!=version)
+            tree2 = traverse(x['url'], auth, version=version)
             if len(tree2) > 0 :
                 tree.append( [tree2] )
     return tree
@@ -436,7 +441,6 @@ def dump_ref(fedoraUrl, auth, unit, version, filename):
     rulesUrl = fedoraUrl + 'rules'
     
     url = fedoraUrl + id2code(unit.lower(), 0 )
-    #children = get_children(url, auth)
     html = traverse_html(url, auth, version=version) 
     open(filename, 'w').write( html )    
 
