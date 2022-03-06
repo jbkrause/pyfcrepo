@@ -46,4 +46,5 @@ python cli.py loadref --unit ACV --unitDesc "Archives cantonales vaudoises" --fi
 python cli.py loadrecords --unit ACV --file data/records/records.csv
 python cli.py updateref --unit ACV --file data/referentials/acv3.0.0.csv --oldfile data/referentials/acv2.0.0.csv --version 3.0.0
 python cli.py dumpref --unit ACV --file v3.html --version 3.0.0
+python cli.py listrecords --unit ACV --refid 12
 ```

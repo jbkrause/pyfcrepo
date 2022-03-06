@@ -34,6 +34,7 @@ usage = '''cli.py ACTION [--unit UNIT] [--file FILE] [--version VERSION]
 parser = argparse.ArgumentParser(description='Manage Fedora Commons repository.')
 parser.add_argument('action', help='checkcon | initrepo | loadagents | loadref | updateref .')
 parser.add_argument('--unit', dest='unitCode', help='Target unit.')
+parser.add_argument('--refid', dest='refid', help='Id of referential.')
 parser.add_argument('--unitDesc', dest='unitDesc', help='Target unit description.')
 parser.add_argument('--file', dest='input_file', help='Input file.')
 parser.add_argument('--oldfile', dest='oldfile', help='Input file.')
@@ -84,12 +85,17 @@ elif args.action=='loadref':
                                 version=args.version, filename=args.input_file)
     print('Units', status_codes)
 
-
 elif args.action=='loadrecords':
     print('Load records...')
     status_codes = records.load_records(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode)
     print('Dossier', status_codes)
+
+elif args.action=='listrecords':
+    print('Dossiers attached to {unit}/{id}'.format(unit=args.unitCode.lower(), id=args.refid))
+    out = referential.list_records(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode, refid=args.refid)
+    print(out)
     
 elif args.action=='updateref':
     print('Update referetial to version ' + args.version)

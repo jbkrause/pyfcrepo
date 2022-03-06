@@ -308,6 +308,9 @@ def get_metadata(url, auth):
             elif '<premis:version>' in l:
                 l2 = l.replace('<premis:version>','').strip(' \t\n.;<>"')
                 out['version'] = l2
+            elif '<rico:isOrWasPartOf>' in l:
+                l2 = l.replace('<rico:isOrWasPartOf>','').strip(' \t\n.;<>"')
+                out['parent_id'] = l2
     else:
         print('ERROR')
     return out
@@ -341,14 +344,6 @@ def get_children(url, auth, version=None):
                 children.append(l2)
     else:
         print('ERROR')
-    # keep only children of requested version
-    #if version is not None:
-    #    children2 = []
-    #    for child in children:
-    #        child_version = get_metadata(child, auth)['version'].strip('"')
-    #        if child_version == version:
-    #            children2.append(child)
-    #    children = children2
     return children
 
 def get_children_lastVersion(url, auth):
@@ -376,7 +371,7 @@ def traverse(url, auth, version=None):
         children_md_sorted = sorted( children_md, key=get_callnr )
         for x in children_md_sorted : 
             tree.append(x)
-            tree2 = traverse(x['url'], auth)
+            tree2 = traverse(x['url'], auth, version!=version)
             if len(tree2) > 0 :
                 tree.append( [tree2] )
     return tree
@@ -444,3 +439,22 @@ def dump_ref(fedoraUrl, auth, unit, version, filename):
     #children = get_children(url, auth)
     html = traverse_html(url, auth, version=version) 
     open(filename, 'w').write( html )    
+
+def list_records(fedoraUrl, auth, unit, refid):
+    url = fedoraUrl + 'fcr:search?condition=fedora_id%3Drecords%2F{unit}%2FD*'.format(unit=unit.lower())
+    r = requests.get(url, auth=auth)
+    r = r.json()
+    ids = []
+    for x in r['items']:
+        x2 = x['fedora_id'].replace(fedoraUrl+'records/' , '')
+        x3 = x2.split('/')[:2]
+        x4 = fedoraUrl+'records/' + '/'.join(x3)      
+        ids.append(x4)
+    ids = list(set(ids))
+    ids2 = []
+    for x in ids:
+        md = get_metadata(x, auth)
+        if 'parent_id' in md.keys():
+            if md['parent_id'].endswith(unit.lower()+'/'+str(refid)):
+                ids2.append(x)
+    return ids2
