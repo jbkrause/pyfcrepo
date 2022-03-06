@@ -16,6 +16,7 @@ from . import nodes
 
 from collections import defaultdict
 import re
+import datetime
 
 #############
 ## helpers ##
@@ -462,3 +463,93 @@ def list_records(fedoraUrl, auth, unit, refid):
             if md['parent_id'].endswith(unit.lower()+'/'+str(refid)):
                 ids2.append(x)
     return ids2
+    
+def close_record(fedoraUrl, auth, unit, refid):
+    urlDossier = fedoraUrl + 'records/{unit}/{id}'.format(unit=unit.lower(), id=refid)
+    r =  requests.get(urlDossier, auth=auth)
+    if r.status_code == 200:
+        eventsUrl = urlDossier + '/events'
+        headers = {"Content-Type": "text/turtle"}
+        data = """ <>  <rico:title> 'Dossier events'.
+                   """
+        r2 = requests.put(eventsUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
+
+        eventsUrl = urlDossier + '/events/e1'
+
+        # Update dossier
+        newTriple = """<{urlDossier}>  <rico:isAffectedBy> <{eventsUrl}>  .
+                       <{urlDossier}>  <rico:hasRecordState> <http://localhost:8080/rest/states/closed> .  
+                    """.format(urlDossier=urlDossier,eventsUrl=eventsUrl)
+        data = r.text
+        datas = data.split('\n')
+        data2 = ''
+        for s in datas:
+            if not (('rdf:type' in s) or ('fedora:' in s) or 
+                    ('ldp:contains' in s) or ('rico:hasRecordState' in s) ):
+                    data2 += '\n' + s
+        data2 = data2.strip(' \n')
+
+        if data2[-1] == ';':
+            data2 = data2[:-1] + '.'
+        data2 += '\n' + newTriple
+        
+    r = requests.put(urlDossier, auth=auth, data=data2.encode('utf-8'), headers=headers)
+
+    currentVersion = get_current_version( get_versions(urlDossier, auth))
+
+    normalizedDate = datetime.datetime.now().strftime('%Y-%m-%d')
+
+    #dossierUrl = urlDossier +'/fcr:versions/'+ currentVersion
+    dossierUrl = currentVersion
+
+    headers = {"Content-Type": "text/turtle"}
+
+    data = """ <>  <rico:title> 'Clôture du dossier'.
+               <> <rico:type> <rico:event>.
+               <> <rico:normalizedDateValue> '{normalizedDate}' .
+               <> <rico:isEventTypeOf> <http://localhost:8080/rest/events/closing> .
+               <> <rico:affects> <{dossierUrl}> .
+               """.format( dossierUrl=dossierUrl, normalizedDate=normalizedDate )
+
+    r = requests.put(eventsUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
+    
+def move_record(fedoraUrl, auth, unit, id, target_refid):
+    urlDossier = fedoraUrl + 'records/{unit}/{id}'.format(unit=unit.lower(), id=id)
+    recordUri  = urlDossier
+    newParent  = fedoraUrl + 'records/{unit}/{id}'.format(unit=unit.lower(), id=target_refid)
+    newId      = get_metadata(newParent, auth)['callnr']
+    if '/' in newId:
+        newId = newId.split('/')[-1]    
+    print(newId)
+    r =  requests.get(urlDossier, auth=auth)
+
+    if r.status_code == 200:
+
+
+
+        newTriple = """<{urlDossier}>  <rico:isOrWasPartOf> <{newParent}> .
+                       <{urlDossier}>  <rico:hasOrHadIdentifier>  '{newId}' .
+                    """.format(urlDossier=urlDossier,newParent=newParent, newId=newId)
+
+        data = r.text
+        datas = data.split('\n')
+        data2 = ''
+        for s in datas:
+            if not (('rdf:type' in s) or ('fedora:' in s) or 
+                    ('ldp:contains' in s) or ('rico:isOrWasPartOf' in s) or
+                    ('rico:hasOrHadIdentifier' in s) ):
+                    data2 += '\n' + s
+        data2 = data2.strip(' \n')
+
+        if data2[-1] == ';':
+            data2 = data2[:-1] + '.'
+        data2 += '\n' + newTriple
+
+        
+    else:
+        print('ERROR')
+        print(r.status_code)
+        print(r.text)
+    
+    headers = {"Content-Type": "text/turtle"}    
+    r = requests.put(recordUri, auth=auth, data=data2.encode('utf-8'), headers=headers)

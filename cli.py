@@ -35,6 +35,7 @@ parser = argparse.ArgumentParser(description='Manage Fedora Commons repository.'
 parser.add_argument('action', help='checkcon | initrepo | loadagents | loadref | updateref .')
 parser.add_argument('--unit', dest='unitCode', help='Target unit.')
 parser.add_argument('--refid', dest='refid', help='Id of referential.')
+parser.add_argument('--dosid', dest='dosid', help='Id of dossier.')
 parser.add_argument('--unitDesc', dest='unitDesc', help='Target unit description.')
 parser.add_argument('--file', dest='input_file', help='Input file.')
 parser.add_argument('--oldfile', dest='oldfile', help='Input file.')
@@ -96,6 +97,18 @@ elif args.action=='listrecords':
     out = referential.list_records(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode, refid=args.refid)
     print(out)
+
+elif args.action=='closerecord':
+    print('Close record...')
+    out = referential.close_record(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode, refid=args.dosid)
+    print('Dossier', out)
+
+elif args.action=='moverecord':
+    print('Move record...')
+    out = referential.move_record(fedoraUrl=fedoraUrl, auth=auth, 
+                                unit=args.unitCode, id=args.dosid, target_refid=args.refid)
+    print('Dossier', out)
     
 elif args.action=='updateref':
     print('Update referetial to version ' + args.version)
