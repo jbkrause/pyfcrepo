@@ -294,8 +294,19 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
         r = requests.put(url, auth=auth, data=data2.encode('utf-8'), headers=headers)
         print(r.status_code)
 
-def get_metadata(url, auth):
-    r =  requests.get(url, auth=auth)
+def get_metadata(url, auth, version=None):
+    if version == None:
+        r =  requests.get(url, auth=auth)
+    else:
+        versions = get_versions(url, auth)
+        vv = None
+        for ver in versions:
+            v = get_metadata(ver, auth)['version']
+            if v == version:
+                vv=ver
+                break
+        r =  requests.get(vv, auth=auth)
+    
     out = {'url':url, 'title':'None', 'callnr':'X', 'version':'None'}
     if r.status_code == 200:
         data = r.text
@@ -313,7 +324,8 @@ def get_metadata(url, auth):
                 l2 = l.replace('<rico:isOrWasPartOf>','').strip(' \t\n.;<>"')
                 out['parent_id'] = l2
     else:
-        print('ERROR')
+        pass
+        #print('ERROR')
     return out
     
 def get_versions(url, auth):
@@ -373,7 +385,8 @@ def traverse(url, auth, version=None):
     tree = []
     children = get_children(url, auth, version=version)
     if isinstance(children, list):
-        children_md = [get_metadata(u, auth) for u in children]
+        #FIXME: add version to get metadata
+        children_md = [get_metadata(u, auth, version=version) for u in children]
         children_md_sorted = sorted( children_md, key=get_callnr )
         for x in children_md_sorted : 
             tree.append(x)

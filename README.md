@@ -35,6 +35,7 @@ Download Java on Oracle website and run:
 
 ``` bash
 C:\path\to\java\jdk\bin\java.exe -jar fcrepo-webapp-6.0.0-jetty-console.jar
+C:\Applications\java\jdk\bin\java.exe -jar fcrepo-webapp-6.0.0-jetty-console.jar
 ```
 ```
 ## Usage
@@ -51,4 +52,8 @@ python cli.py dumpref --unit ACV --file v3.html --version 3.0.0
 python cli.py dumpref --unit ACV --file v2.html --version 2.0.0
 python cli.py listrecords --unit ACV --refid 19135
 python cli.py listrecords --unit ACV --refid 19132
+
+## Todo
+
+Improve listrecords
 ```
