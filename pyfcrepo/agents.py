@@ -33,7 +33,7 @@ def load_tree(fedoraUrl, auth, filename):
 
     # Read tree
 
-    df = pd.read_csv(filename, sep=",")
+    df = pd.read_csv(filename, sep=";")
 
     df['id'] = df['Code']
     df['parent_id'] = df['PARENT']

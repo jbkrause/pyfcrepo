@@ -44,7 +44,11 @@ python cli.py initrepo
 python cli.py loadagents --file data/agents/EdV.csv
 python cli.py loadref --unit ACV --unitDesc "Archives cantonales vaudoises" --file data/referentials/acv2.0.0.csv --version 2.0.0
 python cli.py loadrecords --unit ACV --file data/records/records.csv
+python cli.py moverecord --unit ACV --dosid D000002513 --refid 19132 # from acv/19135
+python cli.py closerecord --unit ACV --dosid D000002513
 python cli.py updateref --unit ACV --file data/referentials/acv3.0.0.csv --oldfile data/referentials/acv2.0.0.csv --version 3.0.0
 python cli.py dumpref --unit ACV --file v3.html --version 3.0.0
-python cli.py listrecords --unit ACV --refid 12
+python cli.py dumpref --unit ACV --file v2.html --version 2.0.0
+python cli.py listrecords --unit ACV --refid 19135
+python cli.py listrecords --unit ACV --refid 19132
 ```

@@ -61,7 +61,7 @@ def create_dossier(fedoraUrl, auth, unit,
     headers2 = {"Content-Type": "text/turtle",
                "Link": '<http://fedora.info/definitions/v4/repository#ArchivalGroup>;rel="type"'}
     data = """ <>  <rico:title> '{title}'.
-               <>  <rico:hasCreator> '<{creator}>'.
+               <>  <rico:hasCreator> <{creator}>.
                <>  <rico:hasRecordState>  <{state}>.
                <>  <rico:isRecordSetTypeOf> <{recSetType}>.
                <>  <rico:scopeAndContent>  '{abstract}'.
@@ -162,19 +162,22 @@ def load_records(fedoraUrl, auth, unit, creator='agents/roche66',
         
         # create dossier
         parent = unit.lower() + '/' + str(int(dos['parent']))
-        create_dossier(fedoraUrl, auth, unit, 
-                       did=dos['id'][0], callnr=dos['callnr'][0], 
+        sc = create_dossier(fedoraUrl, auth, unit, 
+                       did=dos['id'].values[0], callnr=dos['callnr'].values[0], 
                        parent=parent, children=doc_ids,
                        creator = creator,
-                       title=dos['title'][0], description=dos['description'][0])
+                       title=dos['title'].values[0], description=dos['description'].values[0])
+        status_codes += sc
+        
         #print(docs)
         for ix, doc in docs.iterrows():
             # create document
-            create_document(fedoraUrl, auth, unit, did=doc['callnr'],
-                           parent=dos['id'][0], filename=doc['filename'], 
+            sc = create_document(fedoraUrl, auth, unit, did=doc['callnr'],
+                           parent=dos['id'].values[0], filename=doc['filename'], 
                            mimetype=doc['mimetype'],
                            instanciation=doc['instance'],
                            title=doc['title'], description=doc['description'])
+            status_codes += sc
                                                       
     return status_codes
     

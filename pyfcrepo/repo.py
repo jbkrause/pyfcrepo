@@ -88,6 +88,14 @@ def init_rules(fedoraUrl, auth):
         description = 'The retention period is the duration a dossier is kept before archiving or deletion.'
         status_codes.append( nodes.create_basic(ruleUrl, auth, title, description, recordType=None) )
 
+    closingPeriods = [0, 1, 2, 3, 4, 5]
+    for i in closingPeriods:
+        ruleUrl = rulesUrl + '/closingPeriod' + str(i) + 'A'
+        title = 'Closing period - ' + str(i) + 'years'
+        description = 'The closing period is the duration after which a dosier should be closed.'
+        status_codes.append( nodes.create_basic(ruleUrl, auth, title, description, recordType=None) )
+
+        
     protections = ['LIBRE', 'ORDINAIRE', 'SPECIAL', 'PROLONGEE']
     delais =      ['0',     '30',         '50',     '100']
     for i,x in enumerate(protections):

@@ -512,6 +512,7 @@ def close_record(fedoraUrl, auth, unit, refid):
                """.format( dossierUrl=dossierUrl, normalizedDate=normalizedDate )
 
     r = requests.put(eventsUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
+    return r.status_code
     
 def move_record(fedoraUrl, auth, unit, id, target_refid):
     urlDossier = fedoraUrl + 'records/{unit}/{id}'.format(unit=unit.lower(), id=id)
@@ -524,7 +525,6 @@ def move_record(fedoraUrl, auth, unit, id, target_refid):
     r =  requests.get(urlDossier, auth=auth)
 
     if r.status_code == 200:
-
 
 
         newTriple = """<{urlDossier}>  <rico:isOrWasPartOf> <{newParent}> .
@@ -553,3 +553,4 @@ def move_record(fedoraUrl, auth, unit, id, target_refid):
     
     headers = {"Content-Type": "text/turtle"}    
     r = requests.put(recordUri, auth=auth, data=data2.encode('utf-8'), headers=headers)
+    return r.status_code

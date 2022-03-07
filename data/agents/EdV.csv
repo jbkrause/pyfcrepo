@@ -1,199 +1,186 @@
-Code,Acronyme,Nom,Code autorité,Code département,Code unité,PARENT,,Préposés,
-EDV,EDV,"État de Vaud
-",,,,-,,,
-A01,AI,Autorité indépendante,,D03,,D03,,,
-A02,GC,Grand Conseil,,A04,,A04,,,
-A03,CE,Conseil d'Etat,,A04,,A04,,,
-A04,OJV,Ordre judiciaire vaudois,,A04,,A04,,1,
-D01,DI,Département indépendant,A03,A03,,A03,,,
-D02,DIT,Département des institutions et du territoire,A03,A03,,A03,,,
-D03,DFJC,"Département de la formation, de la jeunesse et de la culture",A03,A03,,A03,,,
-D04,DES,Département de l'environnement et de la sécurité,A03,A03,,A03,,,
-D05,DSAS,Département de la santé et de l'action sociale,A03,A03,,A03,,,
-D06,DEIS,"Département de l'économie, de l'innovation et du sport",A03,A03,,A03,,,
-D07,DIRH,Département des infrastructures et des ressources humaines,A03,A03,,A03,,,
-D08,DFIRE,Département des finances et des relations extérieures,A03,A03,,A03,,,
-1,CC,Cour des comptes,A01,D09,,D09,,,
-2,CCF,Contrôle cantonal des finances,A01,D08,,D08,,1,
-3,BCMA,Bureau cantonal de médiation administrative,A01,D07,,D07,,,
-4,APDI,Autorité de protection des données et droit à l'information,A01,D06,,D06,,1,
-5,MP,Ministère public,A01,D05,,D05,,,
-6,TN,Tribunal neutre,A01,D04,,D04,,,
-7,GI,Groupe impact,A01,D03,,D03,,1,
-8,CHANC,Chancellerie,A03,D02,,D02,,1,
-9,SGDIT,Secrétariat général du Département des institutions et du territoire,A03,D01,,D01,,1,
-10,BEFH,Bureau de l'égalité entre les femmes et les hommes,A03,D00,43,D00,,1,
-11,SAN,Service des automobiles et de la navigation,A03,D01,,D01,,2,
-12,DGE,Direction générale de l'environnement,A03,D02,,D02,,,
-13,PCR,Planification cantonale et régionale,A03,D02,77,D02,,,
-14,BD,Bureau de la durabilité,A03,D02,,D02,,,
-15,SGDFJC,"Secrétariat général du Département de la formation, de la jeunesse et de la culture",A03,D03,,D03,,,
-16,DGEO,Direction général de l'enseignement obligatoire,A03,D03,,D03,,1,
-17,DGEP,Direction générale de l'enseignement postobligatoire,A03,D03,,D03,,,
-18,DGES,Direction générale de l'enseignement supérieur,A03,D03,,D03,,1,
-19,SESAF,Service de l'enseignement spécialisé et de l'appui à la formation,A03,D03,,D03,,,
-20,DGEJ,Direction générale de l'enfance et de la jeunesse,A03,D03,,D03,,1,
-21,SERAC,Service des affaires culturelles,A03,D03,,D03,,1,
-22,SGDES,Secrétariat général du Département de l'environnement et de la sécurité,A03,D04,,D04,,1,
-23,SCTP,Service des curatelles et tutelles professionnelles,A03,D02,,D02,,1,
-24,CCS,Conseil cantonal de sécurité,A03,D04,,D04,,,
-25,Polcant,Police cantonale vaudoise,A03,D04,,D04,,1,
-28,SPEN,Service pénitentiaire,A03,D04,,D04,,1,
-29,SSCM,Service de la sécurité civile et militaire,A03,D04,,D04,,2,
-30,SGDSAS,Secrétariat général du département de la santé et de l'action sociale,A03,D05,,D05,,1,
-31,DGCS,Direction général de la cohésion sociale,A03,D05,,D05,,,
-32,DGS,Direction général de la santé,A03,D05,,D05,,1,
-33,CHUV,Centre hospitalier universitaire vaudois,A03,D05,,D05,,1,
-34,CIVESS,Contrôle interdisciplinaire des visites en établissements sanitaires et sociaux,A03,D05,,D05,,,
-35,CS,Conseil de santé,A03,D05,,D05,,,
-36,SGDEIS,"Secrétariat général du Département de l'économie, de l'innovation et du sport",A03,D06,,D06,,1,
-37,SDE,Service de l'emploi,A03,D06,,D06,,,&
-38,DGAV,"Direction générale de l'agriculture, de la viticulture et des affaires vétérinaires",A03,D06,,D06,,1,
-39,SPEI,Service de la promotion de l'économie et de l'innovation,A03,D06,,D06,,1,2?Police cantonal du commerce?
-40,SEPS,Service de l'éducation physique et du sport,A03,D06,,D06,,1,
-41,SPOP,Service de la population,A03,D06,,D06,,,
-42,BCI,Bureau cantonal pour l'intégration des étrangers et la prévention du racisme,A03,D06,41,D06,,1,
-43,SGDIRH,Secrétariat général du département des infrastructures et des ressources humaines,A03,D07,,D07,,1,
-44,DGMR,Direction générale de la mobilité et des routes,A03,D07,,D07,,1,
-45,DGNSI,Direction générale du numérique et des systèmes d'information,A03,D07,,D07,,1,
-46,OAJE,Office de l'accueil de jour des enfants,A03,D07,43,D07,,,
-47,SPEV,Service du personnel de l'Etat de Vaud,A03,D07,,D07,,1,
-48,SGDFIRE,Secrétariat général du Département des finances et des relations extérieures,A03,D08,,D08,,1,
-49,DGF,Direction générale de la fiscalité,A03,D08,,D08,,1,
-50,OAE,Office des affaires extérieures,A03,D08,48,D08,,,
-51,STATVD,Statistique Vaud,A03,D08,48,D08,,1,
-52,SAGEFI,Service d'analyse et de gestion financières,A03,D08,,D08,,1,
-53,DGIP,Direction générale des immeubles et du patrimoine,A03,D08,,D08,,1,
-54,DOJ,Direction Ordre judiciaires,A04,D-09,,D-09,,,
-55,TC,Tribunal cantonal,A04,D-08,,D-08,,1,
-56,TA,Tribunaux d'arrondissement,A04,D-07,,D-07,,4,
-57,TP,Tribunaux de prud'hommes,A04,D-06,,D-06,,,
-58,CPC,Chambre patrimoniale cantonale,A04,D-05,,D-05,,,
-59,TM,Tribunal des mineurs,A04,D-04,,D-04,,1,
-60,TB,Tribunal des baux,A04,D-03,,D-03,,1,
-61,TMC,Tribunal des mesures de contrainte et d'application des peines,A04,D-02,,D-02,,1,
-62,JP,Justices de paix,A04,D-01,,D-01,,9,
-63,OP,Offices des poursuites,A04,D00,,D00,,10,
-64,OF,Offices des faillites,A04,D01,,D01,,4,
-65,OCRC,Office cantonal du registre du commerce,A04,D02,,D02,,1,
-66,ACV,Archives cantonales vaudoises,A03,D01,8,D01,,,
-67,BIC,Bureau d'information et de communication,(ex: SDT,D01,8,D01,,,
-68,SGGC,Secrétariat général du Grand Conseil,A02,A04,,A04,,,
-69,SGOJ,Secrétariat général de l'Ordre judiciare,A04,D02,,D02,,,
-70,DGAIC,Direction générale des affaires instutionnelles et des communes,A03,D02,,D02,,,
-71,DAJ,Direction des affaires juridiques,A03,D02,70,D02,,1,
-72,DACDP,Direction des affaires communales et droits publiques,A03,D02,70,D02,,,
-73,DFC,Direction des finances communales,A03,D02,70,D02,,,
-74,DR,Direction du recouvrement,A03,D02,70,D02,,,
-75,PREF,Prefectures,A03,D02,70,D02,,,
-76,AFFR,Affaires religieuses,A03,D02,70,D02,,,
-77,DGTL,Direction générale du territoire et du logement,A03,D02,,D02,,2,
-78,DIL,Direction du Logement,A03,D02,77,D02,,,
-79,DAC,Direction des autorisation de construire,A03,D02,77,D02,,,
-80,DCG,Direction du cadastre et de la géoinformation,A03,D02,77,D02,,,
-81,URPSP,Unité de recherche pour le pilotage des systèmes pédagogiques,A03,D03,,D03,,,
-82,DP,Direction pédagogique,A03,D03,16,D03,,,
-83,DOP,Direction Organisation-Planification,A03,D03,16,D03,,,
-84,DRH,Direction Ressources humaines et juridique,A03,D03,16,D03,,,
-85,DAF,Direction Administration et finances,A03,D03,16,D03,,,
-86,DGAAI,Direction générale adjointe et affaires intercantonales,A03,D03,18,D03,,,
-87,DOCHE,Direction opératiennelle en charges des Hautes Ecoles,A03,D03,18,D03,,,
-88,DFRH,Direction Finances et Ressources humaines,A03,D03,18,D03,,,
-89,UJ,Unité juridique,A03,D03,18,D03,,,
-90,RIN,Relation internationales,A03,D03,18,D03,,,
-91,OPS,Office de psychologue scolaire,A03,D03,19,D03,,,
-92,OES,Office de l'enseignement spécialisé,A03,D03,19,D03,,,
-93,UMA,Unité migration accueil,A03,D03,19,D03,,,
-94,PSPMS,Unité de promotion de la santé et de la prévention en milieu scolaire,A03,D03,19,D03,,,
-95,CIS,Cellule InterService,A03,D03,19,D03,,,
-96,ORPM,Offices régionaux de protection des mineurs,A03,D03,20,D03,,,
-97,UEMS,Unité d'évaluation et missions spécifiques,A03,D03,20,D03,,,
-98,UPP,Unité de pilotage de la prévention,A03,D03,20,D03,,,
-99,UPPEC,Unité de pilotage des prestation éducatives contractualisées,A03,D03,20,D03,,,
-100,LVCA,Section encouragement à la culture,A03,D03,21,D03,,,
-101,LPMI,Section institutions et patrimoine,A03,D03,21,D03,,,
-102,PolSG,Services généraux,A03,D04,25,D04,,,
-103,GEND,Gendarmerie,A03,D04,25,D04,,,
-104,PolSU,Police de sûreté,A03,D04,25,D04,,,
-105,DST,Direction et services transversaux,A03,D04,28,D04,,,
-106,DETENT,Détention,A03,D04,28,D04,,,
-107,AP,Autorité de placement,A03,D04,28,D04,,,
-108,PROP,Protection de la population,A03,D04,29,D04,,,
-109,PCi,Protection civile,A03,D04,29,D04,,,
-110,AFFML,Affaires militaires et logistique,A03,D04,29,D04,,,
-111,SSTR,Support stratégique,A03,D04,29,D04,,,
-112,DIVA,Division administrative,A03,D04,29,D04,,,
-113,CMM,Château de Morges et ses Musées,A03,D04,29,D04,,,
-114,DIREN,Direction de l'énergie,A03,D04,12,D04,,1,
-115,DIREV,"Direction de l'environnement industriel, urbain et rural",A03,D04,12,D04,,1,
-116,DIRNA,Direction des ressources et du patrimoine naturels,A03,D04,12,D04,,8,
-117,SUP,Unités de support,A03,D04,12,D04,,4,
-118,DAAS,Direction des aides et assurances sociales,A03,D05,31,D05,,,
-119,DINSO,Direction de l'insertion et des solidarités,A03,D05,31,D05,,,
-120,DAH,Direction de l'accompagnement et de l'hébergement,A03,D05,31,D05,,,
-121,DFAJ,Direction finances et affaires juridiques,A03,D05,32,D05,,,
-122,DHP,Direction hôpitaux et préhospitalier,A03,D05,32,D05,,,
-123,DSC,Direction santé communautaire,A03,D05,32,D05,,,
-124,OMC,Office du médecin cantonal,A03,D05,32,D05,,,
-125,CMTPT,Contrôle du marché du travail et protection des travailleurs,A03,D06,37,D06,,1,
-126,LMMT,Logistique des mesures du marché du travail,A03,D06,37,D06,,1,
-127,CoORP,Coordination des offices régionaux de placement,A03,D06,37,D06,,1,
-128,IJC,Instance juridique chômage,A03,D06,37,D06,,1,
-129,CCh,Caisse cantonale de chômage,A03,D06,37,D06,,1,
-130,DAD,Direction administrative,A03,D06,38,D06,,,
-131,DAVI,Direction des affaires vétérinaires et de l'inspectorat,A03,D06,38,D06,,1,
-132,AGRI,Direction d'établissement,A03,D06,38,D06,,,
-133,DAGRI,"Direction de l'agriculture, de la viticulture et des améliorations foncières",A03,D06,38,D06,,1,
-134,UE,Unité Entreprise,A03,D06,39,D06,,1,
-135,UER,Unité Economie régionale,A03,D06,39,D06,,1,
-136,OFCO,Office de la consommation,A03,D06,39,D06,,1,
-137,DEC,Division Etat civil,A03,D06,41,D06,,1,
-138,DCON,Division communes et nationalité,A03,D06,41,D06,,1,
-139,DIVE,Division étrangers,A03,D06,41,D06,,1,
-140,DIVAR,Division asile et retour,A03,D06,41,D06,,1,
-141,CCMP-VD,Centre de compétences sur les marchés publics du canton de vaud,A03,D07,43,D07,,,
-142,UCA,Unité de conseil et d'appui en management et organisation,A03,D07,43,D07,,,
-143,DGMRP,Planification,A03,D07,44,D07,,,
-144,DGMRMN,Management des transports,A03,D07,44,D07,,,
-145,DGMRI,Infrastructures,A03,D07,44,D07,,,
-146,DGMRE,Entretien,A03,D07,44,D07,,,
-147,SIERA,SIERA,A03,D07,44,D07,,,
-148,DGSIRM,Direction Gestion SI et relations métiers,A03,D07,45,D07,,,
-149,DPSM,Direction Produits Services métier,A03,D07,45,D07,,,
-150,DPSETN,Direction Produites services environnement travail numérique,A03,D07,45,D07,,,
-151,DPST,Direction Produits services technologiques,A03,D07,45,D07,,,
-152,DPSSI,Direction Produits services sécurité du SI,A03,D07,45,D07,,,
-153,SACT,Direction Architecture et compétences transervales,A03,D07,45,D07,,,
-154,DIRS,Direction Ressources et soutien,A03,D07,45,D07,,,
-155,ACI,Administration cantonale des impôts,A03,D08,49,D08,,,
-156,RF,Registre foncier,A03,D08,49,D08,,,
-157,DAI,Direction de l'architecture et de l'ingénierie,A03,D08,53,D08,,,
-158,DIF,Direction de l'immobilier et du foncier,A03,D08,53,D08,,,
-159,DAP,Direction de l'archéologie et du patrimoine,A03,D08,53,D08,,,
-160,DAL,Direction des achats et de la logistique,A03,D08,53,D08,,,
-161,SJ,Service juridique de la DGTL,A03,D02,77,D02,,,
-162,SPC,Service de la planification cantonale,A03,D02,77,D02,,,
-163,DIP,Direction des projets territoriaux,A03,D02,77,D02,,,
-164,DAM,Direction de l'aménagement,A03,D02,77,D02,,,
-165,ECA,Etablissement cantonal d'assurance,A01,D02,,D02,,,
-166,MCAH,Musée cantonal d'archéologie et d'histoire,A03,D03,21,D03,,1,
-167,MCG,Musée cantonal de géologie,A03,D03,21,D03,,,
-168,MCZ,Musée cantonal de zoologie,A03,D03,21,D03,,,
-169,MJBC,Musée et jardins botaniques cantonaux,A03,D03,21,D03,,1,
-170,SMRA,Site et musée romains d'Avenches,A03,D03,21,D03,,1,
-171,MEL,Musée de l'Elysée,A03,D03,21,D03,,1,
-172,MCBA,Musée cantonal des Beaux-Arts,A03,D03,21,D03,,1,
-173,BCUL,Bibliothèque cantonale et universitaire Lausanne,A03,D03,21,D03,,1,
-A01,AI,Autorité indépendante,,D03,,D03,,,
-A02,GC,Grand Conseil,,A04,,A04,,,
-A03,CE,Conseil d'Etat,,A04,,A04,,,
-A04,OJV,Ordre judiciaire vaudois,,A04,,A04,,1,
-D01,DI,Département indépendant,A03,A03,,A03,,,
-D02,DIT,Département des institutions et du territoire,A03,A03,,A03,,,
-D03,DFJC,"Département de la formation, de la jeunesse et de la culture",A03,A03,,A03,,,
-D04,DES,Département de l'environnement et de la sécurité,A03,A03,,A03,,,
-D05,DSAS,Département de la santé et de l'action sociale,A03,A03,,A03,,,
-D06,DEIS,"Département de l'économie, de l'innovation et du sport",A03,A03,,A03,,,
-D07,DIRH,Département des infrastructures et des ressources humaines,A03,A03,,A03,,,
-D08,DFIRE,Département des finances et des relations extérieures,A03,A03,,A03,,,
-174,SG,Service généraux de la DGTL,A03,D02,77,D02,,,
+﻿Code;Acronyme;Nom;Code autorité;Code département;Code unité;PARENT
+1;CC;Cour des comptes;A01;D09;;D09
+10;BEFH;Bureau de l'égalité entre les femmes et les hommes;A03;D00;43;43
+100;LVCA;Section encouragement à la culture;A03;D03;21;21
+101;LPMI;Section institutions et patrimoine;A03;D03;21;21
+102;PolSG;Services généraux;A03;D04;25;25
+103;GEND;Gendarmerie;A03;D04;25;25
+104;PolSU;Police de sûreté;A03;D04;25;25
+105;DST;Direction et services transversaux;A03;D04;28;28
+106;DETENT;Détention;A03;D04;28;28
+107;AP;Autorité de placement;A03;D04;28;28
+108;PROP;Protection de la population;A03;D04;29;29
+109;PCi;Protection civile;A03;D04;29;D04
+11;SAN;Service des automobiles et de la navigation;A03;D01;;D01
+110;AFFML;Affaires militaires et logistique;A03;D04;29;29
+111;SSTR;Support stratégique;A03;D04;29;29
+112;DIVA;Division administrative;A03;D04;29;29
+113;CMM;Château de Morges et ses Musées;A03;D04;29;29
+114;DIREN;"Direction de l'énergie";A03;D04;12;12
+115;DIREV;"Direction de l'environnement industriel, urbain et rural";A03;D04;12;12
+116;DIRNA;Direction des ressources et du patrimoine naturels;A03;D04;12;12
+117;SUP;Unités de support;A03;D04;12;12
+118;DAAS;Direction des aides et assurances sociales;A03;D05;31;31
+119;DINSO;Direction de l'insertion et des solidarités;A03;D05;31;31
+12;DGE;Direction générale de l'environnement;A03;D02;;D02
+120;DAH;Direction de l'accompagnement et de l'hébergement;A03;D05;31;31
+121;DFAJ;Direction finances et affaires juridiques;A03;D05;32;32
+122;DHP;Direction hôpitaux et préhospitalier;A03;D05;32;32
+123;DSC;Direction santé communautaire;A03;D05;32;32
+124;OMC;Office du médecin cantonal;A03;D05;32;32
+125;CMTPT;Contrôle du marché du travail et protection des travailleurs;A03;D06;37;37
+126;LMMT;Logistique des mesures du marché du travail;A03;D06;37;37
+127;CoORP;Coordination des offices régionaux de placement;A03;D06;37;37
+128;IJC;Instance juridique chômage;A03;D06;37;37
+129;CCh;Caisse cantonale de chômage;A03;D06;37;37
+13;PCR;Planification cantonale et régionale;A03;D02;77;77
+130;DAD;Direction administrative;A03;D06;38;38
+131;DAVI;Direction des affaires vétérinaires et de l'inspectorat;A03;D06;38;38
+132;AGRI;Direction d'établissement;A03;D06;38;38
+133;DAGRI;Direction de l'agriculture, de la viticulture et des améliorations foncières;A03;D06;38;38
+134;UE;Unité Entreprise;A03;D06;39;39
+135;UER;Unité Economie régionale;A03;D06;39;39
+136;OFCO;Office de la consommation;A03;D06;39;39
+137;DEC;Division Etat civil;A03;D06;41;41
+138;DCON;Division communes et nationalité;A03;D06;41;41
+139;DIVE;Division étrangers;A03;D06;41;41
+14;BD;Bureau de la durabilité;A03;D02;;D02
+140;DIVAR;Division asile et retour;A03;D06;41;31
+141;CCMP-VD;Centre de compétences sur les marchés publics du canton de vaud;A03;D07;43;43
+142;UCA;Unité de conseil et d'appui en management et organisation;A03;D07;43;43
+143;DGMRP;Planification;A03;D07;44;44
+144;DGMRMN;Management des transports;A03;D07;44;44
+145;DGMRI;Infrastructures;A03;D07;44;44
+146;DGMRE;Entretien;A03;D07;44;44
+147;SIERA;SIERA;A03;D07;44;44
+148;DGSIRM;Direction Gestion SI et relations métiers;A03;D07;45;45
+149;DPSM;Direction Produits Services métier;A03;D07;45;45
+15;SGDFJC;Secrétariat général du Département de la formation, de la jeunesse et de la culture;A03;D03;;D03
+150;DPSETN;Direction Produites services environnement travail numérique;A03;D07;45;45
+151;DPST;Direction Produits services technologiques;A03;D07;45;45
+152;DPSSI;Direction Produits services sécurité du SI;A03;D07;45;45
+153;SACT;Direction Architecture et compétences transervales;A03;D07;45;45
+154;DIRS;Direction Ressources et soutien;A03;D07;45;45
+155;ACI;Administration cantonale des impôts;A03;D08;49;49
+156;RF;Registre foncier;A03;D08;49;49
+157;DAI;Direction de l'architecture et de l'ingénierie;A03;D08;53;53
+158;DIF;Direction de l'immobilier et du foncier;A03;D08;53;53
+159;DAP;Direction de l'archéologie et du patrimoine;A03;D08;53;53
+16;DGEO;Direction général de l'enseignement obligatoire;A03;D03;;D03
+160;DAL;Direction des achats et de la logistique;A03;D08;53;53
+161;SJ;Service juridique de la DGTL;A03;D02;77;77
+162;SPC;Service de la planification cantonale;A03;D02;77;77
+163;DIP;Direction des projets territoriaux;A03;D02;77;77
+164;DAM;Direction de l'aménagement;A03;D02;77;77
+165;ECA;Etablissement cantonal d'assurance;A01;D02;;D02
+166;MCAH;Musée cantonal d'archéologie et d'histoire;A03;D03;21;21
+167;MCG;Musée cantonal de géologie;A03;D03;21;21
+168;MCZ;Musée cantonal de zoologie;A03;D03;21;21
+169;MJBC;Musée et jardins botaniques cantonaux;A03;D03;21;21
+17;DGEP;Direction générale de l'enseignement postobligatoire;A03;D03;;D03
+170;SMRA;Site et musée romains d'Avenches;A03;D03;21;21
+171;MEL;Musée de l'Elysée;A03;D03;21;21
+172;MCBA;Musée cantonal des Beaux-Arts;A03;D03;21;21
+173;BCUL;Bibliothèque cantonale et universitaire Lausanne;A03;D03;21;21
+174;SG;Service généraux de la DGTL;A03;D02;77;77
+18;DGES;Direction générale de l'enseignement supérieur;A03;D03;;D03
+19;SESAF;Service de l'enseignement spécialisé et de l'appui à la formation;A03;D03;;D03
+2;CCF;Contrôle cantonal des finances;A01;D08;;D08
+20;DGEJ;Direction générale de l'enfance et de la jeunesse;A03;D03;;D03
+21;SERAC;Service des affaires culturelles;A03;D03;;D03
+22;SGDES;Secrétariat général du Département de l'environnement et de la sécurité;A03;D04;;D04
+23;SCTP;Service des curatelles et tutelles professionnelles;A03;D02;;D02
+24;CCS;Conseil cantonal de sécurité;A03;D04;;D04
+25;Polcant;Police cantonale vaudoise;A03;D04;;D04
+28;SPEN;Service pénitentiaire;A03;D04;;D04
+29;SSCM;Service de la sécurité civile et militaire;A03;D04;;D04
+3;BCMA;Bureau cantonal de médiation administrative;A01;D07;;D07
+30;SGDSAS;Secrétariat général du département de la santé et de l'action sociale;A03;D05;;D05
+31;DGCS;Direction général de la cohésion sociale;A03;D05;;D05
+32;DGS;Direction général de la santé;A03;D05;;D05
+33;CHUV;Centre hospitalier universitaire vaudois;A03;D05;;D05
+34;CIVESS;Contrôle interdisciplinaire des visites en établissements sanitaires et sociaux;A03;D05;;D05
+35;CS;Conseil de santé;A03;D05;;D05
+36;SGDEIS;Secrétariat général du Département de l'économie, de l'innovation et du sport;A03;D06;;D06
+37;SDE;Service de l'emploi;A03;D06;;D06
+38;DGAV;Direction générale de l'agriculture, de la viticulture et des affaires vétérinaires;A03;D06;;D06
+39;SPEI;Service de la promotion de l'économie et de l'innovation;A03;D06;;D06
+4;APDI;Autorité de protection des données et droit à l'information;A01;D06;;D06
+40;SEPS;Service de l'éducation physique et du sport;A03;D06;;D06
+41;SPOP;Service de la population;A03;D06;;D06
+42;BCI;Bureau cantonal pour l'intégration des étrangers et la prévention du racisme;A03;D06;41;41
+43;SGDIRH;Secrétariat général du département des infrastructures et des ressources humaines;A03;D07;;D07
+44;DGMR;Direction générale de la mobilité et des routes;A03;D07;;D07
+45;DGNSI;Direction générale du numérique et des systèmes d'information;A03;D07;;D07
+46;OAJE;Office de l'accueil de jour des enfants;A03;D07;43;43
+47;SPEV;Service du personnel de l'Etat de Vaud;A03;D07;;D07
+48;SGDFIRE;Secrétariat général du Département des finances et des relations extérieures;A03;D08;;D08
+49;DGF;Direction générale de la fiscalité;A03;D08;;D08
+5;MP;Ministère public;A01;D05;;D05
+50;OAE;Office des affaires extérieures;A03;D08;48;48
+51;STATVD;Statistique Vaud;A03;D08;48;48
+52;SAGEFI;Service d'analyse et de gestion financières;A03;D08;;D08
+53;DGIP;Direction générale des immeubles et du patrimoine;A03;D08;;D08
+54;DOJ;Direction Ordre judiciaires;A04;D09;;D09
+55;TC;Tribunal cantonal;A04;D08;;D08
+56;TA;Tribunaux d'arrondissement;A04;D07;;D07
+57;TP;Tribunaux de prud'hommes;A04;D06;;D06
+58;CPC;Chambre patrimoniale cantonale;A04;D05;;D05
+59;TM;Tribunal des mineurs;A04;D04;;D04
+6;TN;Tribunal neutre;A01;D04;;D04
+60;TB;Tribunal des baux;A04;D03;;D03
+61;TMC;Tribunal des mesures de contrainte et d'application des peines;A04;D02;;D02
+62;JP;Justices de paix;A04;D01;;D01
+63;OP;Offices des poursuites;A04;D00;;D00
+64;OF;Offices des faillites;A04;D01;;D01
+65;OCRC;Office cantonal du registre du commerce;A04;D02;;D02
+66;ACV;Archives cantonales vaudoises;A03;D01;8;8
+67;BIC;Bureau d'information et de communication;(ex: SDT;D01;8;8
+68;SGGC;Secrétariat général du Grand Conseil;A02;A04;;A04
+69;SGOJ;Secrétariat général de l'Ordre judiciare;A04;D02;;D02
+7;GI;Groupe impact;A01;D03;;D03
+70;DGAIC;Direction générale des affaires instutionnelles et des communes;A03;D02;;D02
+71;DAJ;Direction des affaires juridiques;A03;D02;70;70
+72;DACDP;Direction des affaires communales et droits publiques;A03;D02;70;70
+73;DFC;Direction des finances communales;A03;D02;70;70
+74;DR;Direction du recouvrement;A03;D02;70;70
+75;PREF;Prefectures;A03;D02;70;70
+76;AFFR;Affaires religieuses;A03;D02;70;70
+77;DGTL;Direction générale du territoire et du logement;A03;D02;;D02
+78;DIL;Direction du Logement;A03;D02;77;77
+79;DAC;Direction des autorisation de construire;A03;D02;77;77
+8;CHANC;Chancellerie;A03;D02;;D02
+80;DCG;Direction du cadastre et de la géoinformation;A03;D02;77;77
+81;URPSP;Unité de recherche pour le pilotage des systèmes pédagogiques;A03;D03;;D03
+82;DP;Direction pédagogique;A03;D03;16;16
+83;DOP;Direction Organisation-Planification;A03;D03;16;16
+84;DRH;Direction Ressources humaines et juridique;A03;D03;16;16
+85;DAF;Direction Administration et finances;A03;D03;16;16
+86;DGAAI;Direction générale adjointe et affaires intercantonales;A03;D03;18;18
+87;DOCHE;Direction opératiennelle en charges des Hautes Ecoles;A03;D03;18;18
+88;DFRH;Direction Finances et Ressources humaines;A03;D03;18;18
+89;UJ;Unité juridique;A03;D03;18;18
+9;SGDIT;Secrétariat général du Département des institutions et du territoire;A03;D01;;D01
+90;RIN;Relation internationales;A03;D03;18;18
+91;OPS;Office de psychologue scolaire;A03;D03;19;19
+92;OES;Office de l'enseignement spécialisé;A03;D03;19;19
+93;UMA;Unité migration accueil;A03;D03;19;19
+94;PSPMS;Unité de promotion de la santé et de la prévention en milieu scolaire;A03;D03;19;19
+95;CIS;Cellule InterService;A03;D03;19;19
+96;ORPM;Offices régionaux de protection des mineurs;A03;D03;20;20
+97;UEMS;Unité d'évaluation et missions spécifiques;A03;D03;20;20
+98;UPP;Unité de pilotage de la prévention;A03;D03;20;20
+99;UPPEC;Unité de pilotage des prestation éducatives contractualisées;A03;D03;20;20
+A01;AI;Autorité indépendante;;D03;;EDV
+A02;GC;Grand Conseil;;A04;;EDV
+A03;CE;Conseil d'Etat;;A04;;EDV
+A04;OJV;Ordre judiciaire vaudois;;A04;;EDV
+D01;DI;Département indépendant;A03;A03;;A03
+D02;DIT;Département des institutions et du territoire;A03;A03;;A03
+D03;DFJC;Département de la formation, de la jeunesse et de la culture;A03;A03;;A03
+D04;DES;Département de l'environnement et de la sécurité;A03;A03;;A03
+D05;DSAS;Département de la santé et de l'action sociale;A03;A03;;A03
+D06;DEIS;Département de l'économie, de l'innovation et du sport;A03;A03;;A03
+D07;DIRH;Département des infrastructures et des ressources humaines;A03;A03;;A03
+D08;DFIRE;Département des finances et des relations extérieures;A03;A03;;A03
+EDV;EDV;"État de Vaud";;;;-
