@@ -45,10 +45,15 @@ def init_types(fedoraUrl, auth):
     description = 'Dossier. Must be attached to a referential leaf.'
     status_codes.append( nodes.create_basic(typeUrl, auth, title, description, recordType='<rico:RecordSetType>') )
 
+    typeUrl = typesUrl + '/instantiation'
+    title = 'Dossier'
+    description = 'Instantiation. Must be attached to a document.'
+    status_codes.append( nodes.create_basic(typeUrl, auth, title, description, recordType='<rico:RecordType>') )
+    
     typeUrl = typesUrl + '/document'
     title = 'Document'
     description = 'Document. Always part of a dossier.'
-    status_codes.append( nodes.create_basic(typeUrl, auth, title, description, recordType='<rico:RecordSetType>') )    
+    status_codes.append( nodes.create_basic(typeUrl, auth, title, description, recordType='<rico:RecordType>') )    
     
     return status_codes
 

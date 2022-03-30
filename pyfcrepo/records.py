@@ -93,12 +93,17 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
                     filename='data\\records\\files\\file.pdf', 
                     mimetype='application/pdf', instanciation='i1',
                     title='A document', description='A PDF document.',
+                    fmtName='PDF/A1', fmtVersion='1.4',
+                    fmtRegistry='PRONOM', fmt='fmt/95',
+                    envName='Ubuntu', envVersion='22.04',
+                    inhibitorType='AES', inhibitorKey='1af4b6c5d94',
                     transaction = None ):
     
     status_codes = []
     
     urlDossier = fedoraUrl + id2code( unit, parent, nodeType='r' )
     documentsUrl = urlDossier + '/documents'
+    typesUrl = fedoraUrl + 'types'
     
     headers = {"Content-Type": "text/turtle"}
 
@@ -123,6 +128,7 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
         
     data = """ <>  <rico:title> '{title}'.
                <>  <rico:scopeAndContent>   '{description}'.
+               <>  <rico:type> <http://localhost:8080/rest/types/document>.
                <>  <rico:hasInstantiation> <{instantiation}>.
                """.format(instantiation=instantiationUrl, title=title, description=description)
     r = requests.put(documentUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
@@ -136,11 +142,17 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
         
     data = """ <>  <premis:hasCompositionLevel> "0".
                <>  <premis:orginalName> "{filename}".
+               <>  <premis:formatName> "{fmtName}".
+               <>  <premis:formatVersion> "{fmtVersion}".
+               <>  <premis:formatRegisty> "{fmtRegistry}".
+               <>  <premis:formatRegistyKey> <http://www.nationalarchives.gov.uk/pronom/{fmt}>.               
+               <>  <premis:environmentName> "{envName}".  
+               <>  <premis:environmentVersion> "{envVersion}".                    
                <>  <ebucore:hasMimeType> "{mimetype}".
-               <>  <rico:type> <rico:Instantiation>.
-               <>  <http://www.w3.org/2004/02/skos/exactMatch> <http://www.nationalarchives.gov.uk/pronom/fmt/95>.
+               <>  <rico:type> <{ricoType}>.
                <>  <rico:type> <premis:representation>.
-               """.format(instantiation=instantiationUrl, filename=filename, mimetype=mimetype)
+               """.format(instantiation=instantiationUrl, filename=filename, mimetype=mimetype, ricoType=typesUrl+'/instantiation',
+                           fmtName=fmtName, fmtVersion=fmtVersion, fmtRegistry=fmtRegistry, fmt=fmt, envName=envName, envVersion=envVersion)
     r = requests.put(instantiationUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
     status_codes.append( r.status_code )  
     #print(data)
