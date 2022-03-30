@@ -96,6 +96,7 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
                     fmtName='PDF/A1', fmtVersion='1.4',
                     fmtRegistry='PRONOM', fmt='fmt/95',
                     envName='Ubuntu', envVersion='22.04',
+                    creatingApp='LibreOffice', creatingAppVersion='7.3.1',
                     inhibitorType='AES', inhibitorKey='1af4b6c5d94',
                     transaction = None ):
     
@@ -144,15 +145,17 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
                <>  <premis:orginalName> "{filename}".
                <>  <premis:formatName> "{fmtName}".
                <>  <premis:formatVersion> "{fmtVersion}".
-               <>  <premis:formatRegisty> "{fmtRegistry}".
-               <>  <premis:formatRegistyKey> <http://www.nationalarchives.gov.uk/pronom/{fmt}>.               
+               <>  <premis:formatRegistry> "{fmtRegistry}".
+               <>  <premis:formatRegistryKey> <http://www.nationalarchives.gov.uk/pronom/{fmt}>.               
                <>  <premis:environmentName> "{envName}".  
-               <>  <premis:environmentVersion> "{envVersion}".                    
+               <>  <premis:environmentVersion> "{envVersion}".
+               <>  <premis:creatingApplication> "{creatingApp}".  
+               <>  <premis:creatingApplicationVersion> "{creatingAppVersion}".                
                <>  <ebucore:hasMimeType> "{mimetype}".
                <>  <rico:type> <{ricoType}>.
                <>  <rico:type> <premis:representation>.
                """.format(instantiation=instantiationUrl, filename=filename, mimetype=mimetype, ricoType=typesUrl+'/instantiation',
-                           fmtName=fmtName, fmtVersion=fmtVersion, fmtRegistry=fmtRegistry, fmt=fmt, envName=envName, envVersion=envVersion)
+                           fmtName=fmtName, fmtVersion=fmtVersion, fmtRegistry=fmtRegistry, fmt=fmt, envName=envName, envVersion=envVersion, creatingApp=creatingApp, creatingAppVersion=creatingAppVersion)
     r = requests.put(instantiationUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
     status_codes.append( r.status_code )  
     #print(data)
