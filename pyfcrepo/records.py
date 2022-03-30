@@ -30,7 +30,8 @@ def id2code(unitCode, i, nodeType='r'):
     
 def create_dossier(fedoraUrl, auth, unit, 
                    did='D1', callnr='M.10.01-D2', parent='acv/235', children=[1],
-                   creator = 'agents/roche66', title='Test title', description='Desc.'):
+                   creator = 'agents/roche66', title='Test title', description='Desc.',
+                   transaction = None  ):
 
     status_codes = []       
     urlRecords = fedoraUrl + 'records/' 
@@ -60,6 +61,10 @@ def create_dossier(fedoraUrl, auth, unit,
 
     headers2 = {"Content-Type": "text/turtle",
                "Link": '<http://fedora.info/definitions/v4/repository#ArchivalGroup>;rel="type"'}
+               
+    if transaction is not None:
+        headers2['Atomic-ID']=transaction
+        
     data = """ <>  <rico:title> '{title}'.
                <>  <rico:hasCreator> <{creator}>.
                <>  <rico:hasRecordState>  <{state}>.
@@ -87,7 +92,8 @@ def create_dossier(fedoraUrl, auth, unit,
 def create_document(fedoraUrl, auth, unit, did='1', parent='D1', 
                     filename='data\\records\\files\\file.pdf', 
                     mimetype='application/pdf', instanciation='i1',
-                    title='A document', description='A PDF document.' ):
+                    title='A document', description='A PDF document.',
+                    transaction = None ):
     
     status_codes = []
     
@@ -95,6 +101,11 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     documentsUrl = urlDossier + '/documents'
     
     headers = {"Content-Type": "text/turtle"}
+
+    if transaction is not None:
+        headers['Atomic-ID']=transaction    
+    
+    
     data = """ <>  <rico:title> 'documents'.
                <>  <rico:scopeAndContent>   'Docuements container.'.
                """
@@ -106,6 +117,10 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     #fileUrl = instantiationUrl + '/f1'
 
     headers = {"Content-Type": "text/turtle"}
+    
+    if transaction is not None:
+        headers['Atomic-ID']=transaction  
+        
     data = """ <>  <rico:title> '{title}'.
                <>  <rico:scopeAndContent>   '{description}'.
                <>  <rico:hasInstantiation> <{instantiation}>.
@@ -115,12 +130,16 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     #print(data)
     
     headers = {"Content-Type": "text/turtle"}
+
+    if transaction is not None:
+        headers['Atomic-ID']=transaction  
+        
     data = """ <>  <premis:hasCompositionLevel> "0".
                <>  <premis:orginalName> "{filename}".
                <>  <ebucore:hasMimeType> "{mimetype}".
                <>  <rico:type> <rico:Instantiation>.
                <>  <http://www.w3.org/2004/02/skos/exactMatch> <http://www.nationalarchives.gov.uk/pronom/fmt/95>.
-               <>  <rico:type> <premis:file>.
+               <>  <rico:type> <premis:representation>.
                """.format(instantiation=instantiationUrl, filename=filename, mimetype=mimetype)
     r = requests.put(instantiationUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
     status_codes.append( r.status_code )  
@@ -128,6 +147,10 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     
     headers3 = {"Content-Type": mimetype,
                 "Link" :"<http://www.w3.org/ns/ldp#NonRDFSource>; rel=type"}
+                
+    if transaction is not None:
+        headers3['Atomic-ID']=transaction  
+        
     data = open(filename,'rb').read()
 
     r = requests.put(instantiationUrl+'/binary', auth=auth, data=data, headers=headers3)
@@ -153,6 +176,13 @@ def load_records(fedoraUrl, auth, unit, creator='agents/roche66',
     df['mimetype'] = df['mimetype'].astype(str)
 
     dossiers = pd.unique( df['id'] )
+    
+    # BEGIN TRANSACTION
+    url = "http://localhost:8080/rest/fcr:tx"
+    r = requests.post(url, auth=auth)
+    tx = r.headers['Location']
+    print( 'Begin transaction:', tx )
+    
     for d in dossiers:
         dossier = df[ df['id'] == d ]
         
@@ -160,13 +190,16 @@ def load_records(fedoraUrl, auth, unit, creator='agents/roche66',
         docs = dossier[ dossier['type'] == 'document' ]
         doc_ids = docs['callnr'].tolist()
         
+        r = requests.post(tx, auth=auth) # refresh transaction
+        
         # create dossier
         parent = unit.lower() + '/' + str(int(dos['parent']))
         sc = create_dossier(fedoraUrl, auth, unit, 
                        did=dos['id'].values[0], callnr=dos['callnr'].values[0], 
                        parent=parent, children=doc_ids,
                        creator = creator,
-                       title=dos['title'].values[0], description=dos['description'].values[0])
+                       title=dos['title'].values[0], description=dos['description'].values[0],
+                       transaction = tx)
         status_codes += sc
         
         #print(docs)
@@ -176,8 +209,13 @@ def load_records(fedoraUrl, auth, unit, creator='agents/roche66',
                            parent=dos['id'].values[0], filename=doc['filename'], 
                            mimetype=doc['mimetype'],
                            instanciation=doc['instance'],
-                           title=doc['title'], description=doc['description'])
+                           title=doc['title'], description=doc['description'],
+                           transaction = tx)
             status_codes += sc
+    
+    # END TRANSACTION    
+    r = requests.put(tx, auth=auth)
+    print( 'Commit transaction:', r.status_code )
                                                       
     return status_codes
     
