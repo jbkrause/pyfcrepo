@@ -18,9 +18,10 @@ def create_root(fedoraUrl, auth):
 
     url = fedoraUrl + 'agents' #unitCode.lower()
     headers = {"Content-Type": "text/turtle"}
-    data = """ <>  <rico:title> 'Agents'.
-               <>  <rico:scopeAndContent>   'Administrative units, groups, people and software'.
-               <>  <rico:hasOrHadPart> <{childrenStr}>.
+    data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+               <>  rico:title 'Agents'.
+               <>  rico:scopeAndContent   'Administrative units, groups, people and software'.
+               <>  rico:hasOrHadPart <{childrenStr}>.
                """.format( childrenStr= url +'/EDV' )
     r = requests.put(url, auth=auth, data=data.encode('utf-8'), headers=headers)
     return r.status_code

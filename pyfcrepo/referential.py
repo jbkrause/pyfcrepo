@@ -125,7 +125,7 @@ def load_ref(fedoraUrl, auth, unit, unitDesc, version, filename, creator='roche/
         node_children = [ '<'+fedoraUrl+id2code(unit.lower(), i)+'>' for i in children[row['id']] ]
         children_str = ', '.join(node_children)
         if not children_str == '':
-            parts = '<>  <rico:hasOrHadPart> ' + children_str + ' .' 
+            parts = '<>  rico:hasOrHadPart ' + children_str + ' .' 
         else: 
             parts = ''
             
@@ -146,15 +146,17 @@ def load_ref(fedoraUrl, auth, unit, unitDesc, version, filename, creator='roche/
         
         # create rico turtle
         headers = {"Content-Type": "text/turtle"}
-        data = """ <>  <rico:title> '{title}'.
-                   <>  <rico:hasCreator> <{creator}>.
-                   <>  <rico:isRecordSetTypeOf> <{recSetType}>.
-                   <>  <rico:scopeAndContent>  '{abstract}'.
-                   <>  <rico:hasOrHadIdentifier>  '{identifier}'.
-                   <>  <rico:hasRecordState>  <{state}>.
-                   <>  <rico:isOrWasPartOf> {parent}.
-                   <>  <rico:isOrWasRegulatedBy> {rules}.
-                   <>  <premis:version> '{archivalVersion}'.
+        data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+                   @prefix premis: <http://id.loc.gov/vocabulary/preservation/> .
+                   <>  rico:title '{title}'.
+                   <>  rico:hasCreator <{creator}>.
+                   <>  rico:isRecordSetTypeOf <{recSetType}>.
+                   <>  rico:scopeAndContent  '{abstract}'.
+                   <>  rico:hasOrHadIdentifier  '{identifier}'.
+                   <>  rico:hasRecordState  <{state}>.
+                   <>  rico:isOrWasPartOf {parent}.
+                   <>  rico:isOrWasRegulatedBy {rules}.
+                   <>  premis:version '{archivalVersion}'.
                    {parts}
                """.format( title=row['title'].replace("'", "\\'"), 
                            abstract=row['abstract'].replace("'", "\\'"), 
@@ -233,7 +235,7 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
         node_children = [ '<'+fedoraUrl+id2code(unit.lower(), i)+'>' for i in children[row['id']] ]
         children_str = ', '.join(node_children)
         if not children_str == '':
-            parts = '<>  <rico:hasOrHadPart> ' + children_str + ' .' 
+            parts = '<>  rico:hasOrHadPart ' + children_str + ' .' 
         else: 
             parts = ''
             
@@ -257,15 +259,17 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
         
         # create rico turtle
         headers = {"Content-Type": "text/turtle"}
-        data = """ <>  <rico:title> '{title}'.
-                   <>  <rico:hasCreator> <{creator}>.
-                   <>  <rico:isRecordSetTypeOf> <{recSetType}>.
-                   <>  <rico:scopeAndContent>  '{abstract}'.
-                   <>  <rico:hasOrHadIdentifier>  '{identifier}'.
-                   <>  <rico:hasRecordState>  <{state}>.
-                   <>  <rico:isOrWasPartOf> {parent}.
-                   <>  <rico:isOrWasRegulatedBy> {rules}.
-                   <>  <premis:version> '{archivalVersion}'.
+        data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+                   @prefix premis: <http://id.loc.gov/vocabulary/preservation/> .
+                   <>  rico:title '{title}'.
+                   <>  rico:hasCreator <{creator}>.
+                   <>  rico:isRecordSetTypeOf <{recSetType}>.
+                   <>  rico:scopeAndContent  '{abstract}'.
+                   <>  rico:hasOrHadIdentifier  '{identifier}'.
+                   <>  rico:hasRecordState  <{state}>.
+                   <>  rico:isOrWasPartOf {parent}.
+                   <>  rico:isOrWasRegulatedBy {rules}.
+                   <>  premis:version '{archivalVersion}'.
                    {parts}
                """.format( title=row['title'].replace("'", "\\'"), 
                            abstract=row['abstract'].replace("'", "\\'"), 
@@ -287,7 +291,7 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
         url = fedoraUrl + id2code(unit.lower(), rid )
         #print(url)
 
-        newTriple = """<{url}>  <rico:hasRecordState> <http://localhost:8080/rest/states/closed> .  
+        newTriple = """<{url}>  rico:hasRecordState <http://localhost:8080/rest/states/closed> .  
                     """.format(url=url)
 
         r =  requests.get(url, auth=auth)
@@ -304,6 +308,7 @@ def update_ref(fedoraUrl, auth, unit, version, filename, filename_old, creator='
             if data2[-1] == ';':
                 data2 = data2[:-1] + '.'
             data2 += '\n' + newTriple
+            data2 = '@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .\n@prefix premis: <http://id.loc.gov/vocabulary/preservation/> .\n' + data2
 
         else:
             print('ERROR')
@@ -331,17 +336,17 @@ def get_metadata(url, auth, version=None):
     if r.status_code == 200:
         data = r.text
         for l in data.split('\n'):
-            if '<rico:title>' in l:
-                l2 = l.replace('<rico:title>','').strip(' \t\n.;<>"')
+            if '<https://www.ica.org/standards/RiC/ontology#title>' in l:
+                l2 = l.replace('<https://www.ica.org/standards/RiC/ontology#title>','').strip(' \t\n.;<>"')
                 out['title'] = l2
-            elif '<rico:hasOrHadIdentifier>' in l:
-                l2 = l.replace('<rico:hasOrHadIdentifier>','').strip(' \t\n.;<>"')
+            elif '<https://www.ica.org/standards/RiC/ontology#hasOrHadIdentifier>' in l:
+                l2 = l.replace('<https://www.ica.org/standards/RiC/ontology#hasOrHadIdentifier>','').strip(' \t\n.;<>"')
                 out['callnr'] = l2
-            elif '<premis:version>' in l:
-                l2 = l.replace('<premis:version>','').strip(' \t\n.;<>"')
+            elif '<http://id.loc.gov/vocabulary/preservation/version>' in l:
+                l2 = l.replace('<http://id.loc.gov/vocabulary/preservation/version>','').strip(' \t\n.;<>"')
                 out['version'] = l2
-            elif '<rico:isOrWasPartOf>' in l:
-                l2 = l.replace('<rico:isOrWasPartOf>','').strip(' \t\n.;<>"')
+            elif '<https://www.ica.org/standards/RiC/ontology#isOrWasPartOf>' in l:
+                l2 = l.replace('<https://www.ica.org/standards/RiC/ontology#isOrWasPartOf>','').strip(' \t\n.;<>"')
                 out['parent_id'] = l2
     else:
         pass
@@ -368,18 +373,18 @@ def get_children(url, auth, version=None):
         ver = None
         for v in versions:
             md = get_metadata(v, auth)
+            #print(md)
             if md['version'] == version:
                 ver = v
         #if ver == None:
         #    ver =  versions[0]
-        print(ver)
         r =  requests.get(ver, auth=auth)
     children = []
     if r.status_code == 200:
         data = r.text
         for l in data.split('\n'):
-            if '<rico:hasOrHadPart>' in l:
-                l2 = l.replace('<rico:hasOrHadPart>','').strip(' \t\n.;<>')
+            if '<https://www.ica.org/standards/RiC/ontology#hasOrHadPart>' in l:
+                l2 = l.replace('<https://www.ica.org/standards/RiC/ontology#hasOrHadPart>','').strip(' \t\n.;<>')
                 children.append(l2)
     else:
         print('ERROR')
@@ -391,8 +396,8 @@ def get_children_lastVersion(url, auth):
     if r.status_code == 200:
         data = r.text
         for l in data.split('\n'):
-            if '<rico:hasOrHadPart>' in l:
-                l2 = l.replace('<rico:hasOrHadPart>','').strip(' \t\n.;<>')
+            if '<https://www.ica.org/standards/RiC/ontology#hasOrHadPart>' in l:
+                l2 = l.replace('<https://www.ica.org/standards/RiC/ontology#hasOrHadPart>','').strip(' \t\n.;<>')
                 children.append(l2)
     else:
         print('ERROR')
@@ -510,15 +515,15 @@ def close_record(fedoraUrl, auth, unit, refid):
     if r.status_code == 200:
         eventsUrl = urlDossier + '/events'
         headers = {"Content-Type": "text/turtle"}
-        data = """ <>  <rico:title> 'Dossier events'.
+        data = """ <>  rico:title 'Dossier events'.
                    """
         r2 = requests.put(eventsUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
 
         eventsUrl = urlDossier + '/events/e1'
 
         # Update dossier
-        newTriple = """<{urlDossier}>  <rico:isAffectedBy> <{eventsUrl}>  .
-                       <{urlDossier}>  <rico:hasRecordState> <http://localhost:8080/rest/states/closed> .  
+        newTriple = """<{urlDossier}>  rico:isAffectedBy <{eventsUrl}>  .
+                       <{urlDossier}>  rico:hasRecordState <http://localhost:8080/rest/states/closed> .  
                     """.format(urlDossier=urlDossier,eventsUrl=eventsUrl)
         data = r.text
         datas = data.split('\n')
@@ -544,11 +549,12 @@ def close_record(fedoraUrl, auth, unit, refid):
 
     headers = {"Content-Type": "text/turtle"}
 
-    data = """ <>  <rico:title> 'Clôture du dossier'.
-               <> <rico:type> <rico:event>.
-               <> <rico:normalizedDateValue> '{normalizedDate}' .
-               <> <rico:isEventTypeOf> <http://localhost:8080/rest/events/closing> .
-               <> <rico:affects> <{dossierUrl}> .
+    data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+               <> rico:title 'Clôture du dossier'.
+               <> rico:type rico:event.
+               <> rico:normalizedDateValue '{normalizedDate}' .
+               <> rico:isEventTypeOf <http://localhost:8080/rest/events/closing> .
+               <> rico:affects <{dossierUrl}> .
                """.format( dossierUrl=dossierUrl, normalizedDate=normalizedDate )
 
     r = requests.put(eventsUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
@@ -567,8 +573,8 @@ def move_record(fedoraUrl, auth, unit, id, target_refid):
     if r.status_code == 200:
 
 
-        newTriple = """<{urlDossier}>  <rico:isOrWasPartOf> <{newParent}> .
-                       <{urlDossier}>  <rico:hasOrHadIdentifier>  '{newId}' .
+        newTriple = """<{urlDossier}>  rico:isOrWasPartOf <{newParent}> .
+                       <{urlDossier}>  rico:hasOrHadIdentifier  '{newId}' .
                     """.format(urlDossier=urlDossier,newParent=newParent, newId=newId)
 
         data = r.text
@@ -584,6 +590,7 @@ def move_record(fedoraUrl, auth, unit, id, target_refid):
         if data2[-1] == ';':
             data2 = data2[:-1] + '.'
         data2 += '\n' + newTriple
+        data2 = '@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .\n@prefix premis: <http://id.loc.gov/vocabulary/preservation/> .\n' + data2
 
         
     else:

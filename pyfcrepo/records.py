@@ -53,7 +53,7 @@ def create_dossier(fedoraUrl, auth, unit,
         node_children.append( s )
     children_str = ', '.join(node_children)
     
-    parts = '<>  <rico:hasOrHadPart> ' + children_str + ' .'
+    parts = '<>  rico:hasOrHadPart ' + children_str + ' .'
 
     recordState = fedoraUrl + 'states/open'
 
@@ -65,13 +65,15 @@ def create_dossier(fedoraUrl, auth, unit,
     if transaction is not None:
         headers2['Atomic-ID']=transaction
         
-    data = """ <>  <rico:title> '{title}'.
-               <>  <rico:hasCreator> <{creator}>.
-               <>  <rico:hasRecordState>  <{state}>.
-               <>  <rico:isRecordSetTypeOf> <{recSetType}>.
-               <>  <rico:scopeAndContent>  '{abstract}'.
-               <>  <rico:hasOrHadIdentifier>  '{identifier}'.
-               <>  <rico:isOrWasPartOf> <{parent}>.
+    data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+               @prefix premis: <http://id.loc.gov/vocabulary/preservation/> .
+               <>  rico:title "{title}".
+               <>  rico:hasCreator <{creator}>.
+               <>  rico:hasRecordState  <{state}>.
+               <>  rico:isRecordSetTypeOf <{recSetType}>.
+               <>  rico:scopeAndContent  "{abstract}".
+               <>  rico:hasOrHadIdentifier  '{identifier}'.
+               <>  rico:isOrWasPartOf <{parent}>.
                {parts}
            """.format( title=title, 
                        abstract=description,
@@ -112,8 +114,10 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
         headers['Atomic-ID']=transaction    
     
     
-    data = """ <>  <rico:title> 'documents'.
-               <>  <rico:scopeAndContent>   'Docuements container.'.
+    data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+               @prefix premis: <http://id.loc.gov/vocabulary/preservation/> .
+               <>  rico:title 'documents'.
+               <>  rico:scopeAndContent   'Docuements container.'.
                """
     r = requests.put(documentsUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
     status_codes.append( r.status_code )
@@ -127,10 +131,12 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     if transaction is not None:
         headers['Atomic-ID']=transaction  
         
-    data = """ <>  <rico:title> "{title}".
-               <>  <rico:scopeAndContent>   "{description}".
-               <>  <rico:type> <http://localhost:8080/rest/types/document>.
-               <>  <rico:hasInstantiation> <{instantiation}>.
+    data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+               @prefix premis: <http://id.loc.gov/vocabulary/preservation/> .
+               <>  rico:title "{title}".
+               <>  rico:scopeAndContent   "{description}".
+               <>  rico:type <http://localhost:8080/rest/types/document>.
+               <>  rico:hasInstantiation <{instantiation}>.
                """.format(instantiation=instantiationUrl, title=title, description=description)
     r = requests.put(documentUrl, auth=auth, data=data.encode('utf-8'), headers=headers)
     status_codes.append( r.status_code )
@@ -141,19 +147,22 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     if transaction is not None:
         headers['Atomic-ID']=transaction  
         
-    data = """ <>  <premis:hasCompositionLevel> "0".
-               <>  <premis:orginalName> "{filename}".
-               <>  <premis:formatName> "{fmtName}".
-               <>  <premis:formatVersion> "{fmtVersion}".
-               <>  <premis:formatRegistry> "{fmtRegistry}".
-               <>  <premis:formatRegistryKey> <http://www.nationalarchives.gov.uk/pronom/{fmt}>.               
-               <>  <premis:environmentName> "{envName}".  
-               <>  <premis:environmentVersion> "{envVersion}".
-               <>  <premis:creatingApplication> "{creatingApp}".  
-               <>  <premis:creatingApplicationVersion> "{creatingAppVersion}".                
-               <>  <ebucore:hasMimeType> "{mimetype}".
-               <>  <rico:type> <{ricoType}>.
-               <>  <rico:type> <premis:representation>.
+    data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+               @prefix premis: <http://id.loc.gov/vocabulary/preservation/> .
+               @prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#> .
+               <>  premis:hasCompositionLevel "0".
+               <>  premis:orginalName "{filename}".
+               <>  premis:formatName "{fmtName}".
+               <>  premis:formatVersion "{fmtVersion}".
+               <>  premis:formatRegistry "{fmtRegistry}".
+               <>  premis:formatRegistryKey <http://www.nationalarchives.gov.uk/pronom/{fmt}>.               
+               <>  premis:environmentName "{envName}".  
+               <>  premis:environmentVersion "{envVersion}".
+               <>  premis:creatingApplication "{creatingApp}".  
+               <>  premis:creatingApplicationVersion "{creatingAppVersion}".                
+               <>  ebucore:hasMimeType "{mimetype}".
+               <>  rico:type <{ricoType}>.
+               <>  rico:type premis:representation.
                """.format(instantiation=instantiationUrl, filename=filename, mimetype=mimetype, ricoType=typesUrl+'/instantiation',
                            fmtName=fmtName, fmtVersion=fmtVersion, fmtRegistry=fmtRegistry, fmt=fmt, envName=envName, envVersion=envVersion, creatingApp=creatingApp, creatingAppVersion=creatingAppVersion)
     r = requests.put(instantiationUrl, auth=auth, data=data.encode('utf-8'), headers=headers)

@@ -16,12 +16,13 @@ def create_basic(url, auth, title, description, recordType=None, children=None, 
     headers = {"Content-Type": "text/turtle"}
     if archivalUnit:
         headers["Link"] = '<http://fedora.info/definitions/v4/repository#ArchivalGroup>;rel="type"'
-    data = """ <>  <rico:title> '{title}'.
-               <>  <rico:scopeAndContent>   '{description}'.
+    data = """ @prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+               <>  rico:title '{title}'.
+               <>  rico:scopeAndContent   '{description}'.
                """.format(title=title, description=description)
     if recordType is not None:
-        data += '<>  <rico:type>  {recordType}.\n'.format(recordType=recordType)
+        data += '<>  rico:type  {recordType}.\n'.format(recordType=recordType)
     if children is not None:
-        data += '<>  <rico:hasOrHadPart> <{childrenStr}>.\n'.format(childrenStr=children)
+        data += '<>  rico:hasOrHadPart <{childrenStr}>.\n'.format(childrenStr=children)
     r = requests.put(url, auth=auth, data=data.encode('utf-8'), headers=headers)
     return r.status_code
