@@ -22,15 +22,15 @@ from collections import defaultdict
 
 def id2code(unitCode, i, nodeType='r'):
     #return unitCode.lower() +'/'+ str(nodeType) + str(i)
-    return 'records/'+ unitCode.lower() + '/' + str(i)
+    return 'records/'+ unitCode.lower() + '/dossiers/' + str(i)
 
 ######################
 ## load refernetial ##
 ######################
     
 def create_dossier(fedoraUrl, auth, unit, 
-                   did='D1', callnr='M.10.01-D2', parent='acv/235', children=[1],
-                   creator = 'agents/roche66', title='Test title', description='Desc.',
+                   did='D1', callnr='M.10.01-D2', parent='acv/referential/235', children=[1],
+                   creator = 'agents/roche/66', title='Test title', description='Desc.',
                    transaction = None  ):
 
     status_codes = []       
@@ -44,7 +44,7 @@ def create_dossier(fedoraUrl, auth, unit,
     rId = 'D1' 
     cote = 'M.10.01-D1'
 
-    urlDossier = fedoraUrl + 'records/'+ unit.lower()+ '/' + did #id2code(unit, did, nodeType='r' )
+    urlDossier = fedoraUrl + id2code(unit, did, nodeType='r' ) #'records/'+ unit.lower()+ '/' + did
     recordSetType = typesUrl+'/dossier'
 
     node_children = []
@@ -127,8 +127,8 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     if transaction is not None:
         headers['Atomic-ID']=transaction  
         
-    data = """ <>  <rico:title> '{title}'.
-               <>  <rico:scopeAndContent>   '{description}'.
+    data = """ <>  <rico:title> "{title}".
+               <>  <rico:scopeAndContent>   "{description}".
                <>  <rico:type> <http://localhost:8080/rest/types/document>.
                <>  <rico:hasInstantiation> <{instantiation}>.
                """.format(instantiation=instantiationUrl, title=title, description=description)
@@ -173,7 +173,7 @@ def create_document(fedoraUrl, auth, unit, did='1', parent='D1',
     
     return( status_codes )
 
-def load_records(fedoraUrl, auth, unit, creator='agents/roche66',
+def load_records(fedoraUrl, auth, unit, creator='agents/roche/66',
                  filename="data\\records\\records.csv"):
 
     status_codes = []
@@ -191,46 +191,48 @@ def load_records(fedoraUrl, auth, unit, creator='agents/roche66',
     df['mimetype'] = df['mimetype'].astype(str)
 
     dossiers = pd.unique( df['id'] )
-    
-    # BEGIN TRANSACTION
-    url = "http://localhost:8080/rest/fcr:tx"
-    r = requests.post(url, auth=auth)
-    tx = r.headers['Location']
-    print( 'Begin transaction:', tx )
-    
+        
     for d in dossiers:
+        
+        # BEGIN TRANSACTION
+        #url = "http://localhost:8080/rest/fcr:tx"
+        #r = requests.post(url, auth=auth)
+        #tx = r.headers['Location']
+        #print( 'Begin transaction:', tx )
+    
         dossier = df[ df['id'] == d ]
         
         dos = dossier[ dossier['type'] == 'dossier' ]
         docs = dossier[ dossier['type'] == 'document' ]
         doc_ids = docs['callnr'].tolist()
         
-        r = requests.post(tx, auth=auth) # refresh transaction
-        
         # create dossier
-        parent = unit.lower() + '/' + str(int(dos['parent']))
+        parent = unit.lower() + '/' + dos['parent'].values[0] #str(int(dos['parent']))
         sc = create_dossier(fedoraUrl, auth, unit, 
                        did=dos['id'].values[0], callnr=dos['callnr'].values[0], 
                        parent=parent, children=doc_ids,
                        creator = creator,
                        title=dos['title'].values[0], description=dos['description'].values[0],
-                       transaction = tx)
+                       transaction = None)
         status_codes += sc
         
         #print(docs)
         for ix, doc in docs.iterrows():
+            
+            #r = requests.post(tx, auth=auth) # refresh transaction
+            
             # create document
             sc = create_document(fedoraUrl, auth, unit, did=doc['callnr'],
                            parent=dos['id'].values[0], filename=doc['filename'], 
                            mimetype=doc['mimetype'],
                            instanciation=doc['instance'],
                            title=doc['title'], description=doc['description'],
-                           transaction = tx)
+                           transaction = None)
             status_codes += sc
     
-    # END TRANSACTION    
-    r = requests.put(tx, auth=auth)
-    print( 'Commit transaction:', r.status_code )
+        # END TRANSACTION    
+        #r = requests.put(tx, auth=auth)
+        #print( 'Commit transaction:', r.status_code )
                                                       
     return status_codes
     

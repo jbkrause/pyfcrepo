@@ -93,7 +93,7 @@ elif args.action=='loadrecords':
     print('Dossier', status_codes)
 
 elif args.action=='listrecords':
-    print('Dossiers attached to {unit}/{id}'.format(unit=args.unitCode.lower(), id=args.refid))
+    print('Dossiers attached to {unit}/referential/{id}'.format(unit=args.unitCode.lower(), id=args.refid))
     out = referential.list_records(fedoraUrl=fedoraUrl, auth=auth, 
                                 unit=args.unitCode, refid=args.refid)
     print(out)

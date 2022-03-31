@@ -30,35 +30,55 @@ def strip_textfield(s):
         
 def id2code(unitCode, i, nodeType='r'):
     #return unitCode.lower() +'/'+ str(nodeType) + str(i)
-    return 'records/'+ unitCode.lower() + '/' + str(i)
+    return 'records/'+ unitCode.lower() + '/referential/' + str(i)
 
 ######################
 ## load refernetial ##
 ######################
     
-def load_ref(fedoraUrl, auth, unit, unitDesc, version, filename, creator='roche66'):
+def load_ref(fedoraUrl, auth, unit, unitDesc, version, filename, creator='roche/66'):
 
     status_codes = []       
     urlRecords = fedoraUrl + 'records/' 
     typesUrl = fedoraUrl + 'types'
     rulesUrl = fedoraUrl + 'rules'
     creatorUrl = fedoraUrl + 'agents/' + creator
-    
-    # create unit root
+
+    # create unit container
     url = urlRecords + unit.lower()
     title = unit
     if unitDesc is None:
         description = ''
     else:
         description = unitDesc
-    childrenStr = url + '/0'
+    childrenStr = url + '/referential/0'
     status_codes.append( nodes.create_basic(url, 
                                             auth, 
                                             title, 
                                             description, 
                                             children=childrenStr) )
-                                            
-    
+    # create referential container
+    url = urlRecords + unit.lower() + '/referential'
+    title = 'Referential'
+    description = 'Preservation referential.'
+    childrenStr = url + '/0'
+    status_codes.append( nodes.create_basic(url, 
+                                            auth, 
+                                            title, 
+                                            description, 
+                                            children=childrenStr,
+                                            archivalUnit=True) )    
+
+    # create dossiers container
+    url = urlRecords + unit.lower() + '/dossiers'
+    title = 'Dossiers'
+    description = 'Dossiers.'
+    childrenStr = url + '/0'
+    status_codes.append( nodes.create_basic(url, 
+                                            auth, 
+                                            title, 
+                                            description, 
+                                            children=childrenStr) )                                           
 
     if filename is None:
         f = 'data/acv1.0.0.csv'
@@ -459,26 +479,33 @@ def dump_ref(fedoraUrl, auth, unit, version, filename):
     open(filename, 'w').write( html )    
 
 def list_records(fedoraUrl, auth, unit, refid):
-    url = fedoraUrl + 'fcr:search?condition=fedora_id%3Drecords%2F{unit}%2FD*'.format(unit=unit.lower())
+    url = fedoraUrl + 'fcr:search?condition=fedora_id%3Drecords%2F{unit}%2Fdossiers%2F*'.format(unit=unit.lower())
+    #print(url)
     r = requests.get(url, auth=auth)
     r = r.json()
+    #print(r['items'])
     ids = []
     for x in r['items']:
-        x2 = x['fedora_id'].replace(fedoraUrl+'records/' , '')
-        x3 = x2.split('/')[:2]
-        x4 = fedoraUrl+'records/' + '/'.join(x3)      
-        ids.append(x4)
+        #if 'records/'+unit.lower()+'dossiers/D' in x:
+            x2 = x['fedora_id'].replace(fedoraUrl+'records/' , '')
+            #print(x2)
+            x3 = x2.split('/')[:3]
+            x4 = fedoraUrl+'records/' + '/'.join(x3)      
+            ids.append(x4)
     ids = list(set(ids))
+    #print(ids)
     ids2 = []
     for x in ids:
         md = get_metadata(x, auth)
+        #print(x)
+        #print(md)
         if 'parent_id' in md.keys():
-            if md['parent_id'].endswith(unit.lower()+'/'+str(refid)):
+            if md['parent_id'].endswith(unit.lower()+'/referential/'+str(refid)):
                 ids2.append(x)
     return ids2
     
 def close_record(fedoraUrl, auth, unit, refid):
-    urlDossier = fedoraUrl + 'records/{unit}/{id}'.format(unit=unit.lower(), id=refid)
+    urlDossier = fedoraUrl + 'records/{unit}/dossiers/{id}'.format(unit=unit.lower(), id=refid)
     r =  requests.get(urlDossier, auth=auth)
     if r.status_code == 200:
         eventsUrl = urlDossier + '/events'
@@ -528,9 +555,9 @@ def close_record(fedoraUrl, auth, unit, refid):
     return r.status_code
     
 def move_record(fedoraUrl, auth, unit, id, target_refid):
-    urlDossier = fedoraUrl + 'records/{unit}/{id}'.format(unit=unit.lower(), id=id)
+    urlDossier = fedoraUrl + 'records/{unit}/dossiers/{id}'.format(unit=unit.lower(), id=id)
     recordUri  = urlDossier
-    newParent  = fedoraUrl + 'records/{unit}/{id}'.format(unit=unit.lower(), id=target_refid)
+    newParent  = fedoraUrl + 'records/{unit}/referential/{id}'.format(unit=unit.lower(), id=target_refid)
     newId      = get_metadata(newParent, auth)['callnr']
     if '/' in newId:
         newId = newId.split('/')[-1]    

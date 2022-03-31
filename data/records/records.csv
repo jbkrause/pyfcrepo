@@ -1,10 +1,10 @@
 ﻿id;type;callnr;parent;instance;title;description;fmtName;fmtVersion;fmtRegistryName;fmt;ceatingApp;creatinAppVersion;envName;envVersion;mimetype;filename
-D000000169;dossier;M.06.02;19135;;Archivage ADN;Dossier sur la péservaion à long terme dans l'ADN.;;;;;;;;;;
-D000000169;document;1;;I1;OAIS Introduction;ISO 14721;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;7.3.1;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
-D000000169;document;2;;I2;Archive to DNA;ISO 14721;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;7.3.1;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
-D000003962;dossier;M.06.02;19135;;Gestion des rérérentiels;Structure et mise à jour de référentiels de préservation;;;;;;;;;;
-D000003962;document;1;;I1;RiC;Records in context;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;7.3.1;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
-D000003962;document;2;;I2;OCFL;Oxford common file layout specification;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;7.3.1;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
-D000002513;dossier;M.06.02;19135;;Migration de formats;Analyse des fomats nécessitant des actions de préservation.;;;;;;;;;;
-D000002513;document;1;;I1;PDFA2;PDF archivage;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;7.3.1;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
-D000002513;document;2;;I2;MKV;Conteneur vidéo;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;7.3.1;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
+D000000169;dossier;M.06.02;referential/19135;;Archivage ADN;Dossier sur la péservaion à long terme dans l'ADN.;;;;;;;;;;
+D000000169;document;1;;I1;OAIS Introduction;ISO 14721;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;07.03.2001;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
+D000000169;document;2;;I2;Archive to DNA;ISO 14721;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;07.03.2001;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
+D000003962;dossier;M.06.02;referential/19135;;Gestion des rérérentiels;Structure et mise à jour de référentiels de préservation;;;;;;;;;;
+D000003962;document;1;;I1;RiC;Records in context;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;07.03.2001;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
+D000003962;document;2;;I2;OCFL;Oxford common file layout specification;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;07.03.2001;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
+D000002513;dossier;M.06.02;referential/19135;;Migration de formats;Analyse des fomats nécessitant des actions de préservation.;;;;;;;;;;
+D000002513;document;1;;I1;PDFA2;PDF archivage;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;07.03.2001;Ubuntu;22.04;application/pdf;data/records/files/file.pdf
+D000002513;document;2;;I2;MKV;Conteneur vidéo;PDF/A1;1.4;PRONOM;fmt/95;LibreOffice;07.03.2001;Ubuntu;22.04;application/pdf;data/records/files/file.pdf

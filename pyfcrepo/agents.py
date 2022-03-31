@@ -27,7 +27,7 @@ def create_root(fedoraUrl, auth):
 
 
 def id2codeA(i, nodeType='r'):
-    return 'agents/roche' + str(i)
+    return 'agents/roche/' + str(i)
     
 def load_tree(fedoraUrl, auth, filename):
 

@@ -12,8 +12,10 @@
 
 import requests
 
-def create_basic(url, auth, title, description, recordType=None, children=None):
+def create_basic(url, auth, title, description, recordType=None, children=None, archivalUnit=False):
     headers = {"Content-Type": "text/turtle"}
+    if archivalUnit:
+        headers["Link"] = '<http://fedora.info/definitions/v4/repository#ArchivalGroup>;rel="type"'
     data = """ <>  <rico:title> '{title}'.
                <>  <rico:scopeAndContent>   '{description}'.
                """.format(title=title, description=description)
