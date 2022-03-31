@@ -29,6 +29,13 @@ java -Dfcrepo.namespace.registry=/home/jan/Bureau/Fedora6/custom_namespaces.yml 
 
 ```
 
+Use custom namespaces
+
+``` bash
+-Dfcrepo.namespace.registry=/my/fedora/path/custom_namespaces.yml
+```
+
+
 Variation on Windows
 
 Download Java on Oracle website and run:
