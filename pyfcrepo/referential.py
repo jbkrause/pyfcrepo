@@ -582,8 +582,8 @@ def move_record(fedoraUrl, auth, unit, id, target_refid):
         data2 = ''
         for s in datas:
             if not (('rdf:type' in s) or ('fedora:' in s) or 
-                    ('ldp:contains' in s) or ('rico:isOrWasPartOf' in s) or
-                    ('rico:hasOrHadIdentifier' in s) ):
+                    ('ldp:contains' in s) or ('isOrWasPartOf' in s) or
+                    ('hasOrHadIdentifier' in s) ):
                     data2 += '\n' + s
         data2 = data2.strip(' \n')
 

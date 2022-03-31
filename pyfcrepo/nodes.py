@@ -25,4 +25,6 @@ def create_basic(url, auth, title, description, recordType=None, children=None, 
     if children is not None:
         data += '<>  rico:hasOrHadPart <{childrenStr}>.\n'.format(childrenStr=children)
     r = requests.put(url, auth=auth, data=data.encode('utf-8'), headers=headers)
+    #print(data)
+    #print(r.text)
     return r.status_code

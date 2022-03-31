@@ -13,6 +13,7 @@
 import pandas as pd
 import requests
 from collections import defaultdict
+from . import nodes
 
 def create_root(fedoraUrl, auth):
 
@@ -31,6 +32,20 @@ def id2codeA(i, nodeType='r'):
     return 'agents/roche/' + str(i)
     
 def load_tree(fedoraUrl, auth, filename):
+    
+    status_codes = []
+    
+    # create referential container
+    url = fedoraUrl + 'agents/roche'
+    title = 'ROCHE Referential'
+    description = 'Referential of Administrative units.'
+    childrenStr = url + '/EDV'
+    status_codes.append( nodes.create_basic(url, 
+                                            auth, 
+                                            title, 
+                                            description, 
+                                            children=childrenStr,
+                                            archivalUnit=True) )            
 
     # Read tree
 
@@ -52,7 +67,6 @@ def load_tree(fedoraUrl, auth, filename):
 
     for ix, row in df.iterrows():
         
-        status_codes = []
         url = fedoraUrl + id2codeA(row['id'] )
         
         # compute parent node
